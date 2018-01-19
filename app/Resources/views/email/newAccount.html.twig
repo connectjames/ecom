@@ -1,0 +1,57 @@
+<style type="text/css">
+    body,
+    html,
+    .body-drip {
+        border-top: 8px solid #663399;
+    }
+</style>
+
+
+
+<container class="header">
+
+    <spacer size="16"></spacer>
+
+    <row class="collapse">
+        <columns>
+            <a href="{{ absolute_url(path('index')) }}"><img src="{{ absolute_url(asset('assets/images/logo.png')) }}" alt="{{ company_name }} Logo" width="300px"></a>
+        </columns>
+    </row>
+</container>
+
+<container class="body-drip">
+
+    <row>
+        <columns>
+            <h4 class="text-center">Welcome to {{ company_name }}, {{ user.firstName }}</h4>
+            <p class="text-center">Thank you for registering with us!</p>
+        </columns>
+    </row>
+
+    <hr/>
+
+    <row>
+        <columns>
+            <p class="text-center">Don't miss out on all our products! Click on the link below to start shopping with us and be part of our thousands happy customer.</p>
+            <center>
+                <a href="{{ absolute_url(path('index')) }}"><button class="success">SHOP NOW!</button></a>
+            </center>
+        </columns>
+    </row>
+
+    <row class="collapsed footer">
+        <columns>
+            <spacer size="16"></spacer>
+            <p class="text-center">&copy; All Rights Reserved, {{ company_name }}
+            <center>
+                <menu>
+                    <item><a href="{{ social_facebook }}"><img src="{{ absolute_url(asset('assets/images/social-icons/facebook.png')) }}" alt="Facebook"></a></item>
+                    <item><a href="{{ social_twitter }}"><img src="{{ absolute_url(asset('assets/images/social-icons/twitter.png')) }}" alt="Twitter"></a></item>
+                    <item><a href="{{ social_linkedin }}"><img src="{{ absolute_url(asset('assets/images/social-icons/linkedin.png')) }}" alt="Linkedin"></a></item>
+                    <item><a href="{{ social_gplus }}"><img src="{{ absolute_url(asset('assets/images/social-icons/gplus.png')) }}" alt="Google Plus"></a></item>
+                </menu>
+            </center>
+        </columns>
+    </row>
+
+</container>

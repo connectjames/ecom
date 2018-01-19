@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+{% block metaTitle %}About Us{% endblock %}
+{% block metaKeywords %}about {{ company_keywords }}, {{ company_keywords }} team{% endblock %}
+{% block metaDescription %}About us - About {{ company_name }}, meet {{ company_name }}'s team.{% endblock %}
+{% block canonical %}{{ absolute_url(path('about_us')) }}{% endblock %}
+{% block body %}
+    <div id="about">
+
+        <section class="page-header page-header-xs">
+            <div class="container">
+
+                <h1>About Us</h1>
+
+                <!-- breadcrumbs -->
+                <ol class="breadcrumb">
+                    <li><a href="{{ path('index') }}">Home</a></li>
+                    <li class="active"><a href="{{ path('about_us') }}">About Us</a></li>
+                </ol><!-- /breadcrumbs -->
+
+            </div>
+        </section>
+        <!-- /PAGE HEADER -->
+
+        <!-- NEW FEATURED -->
+        <section>
+            <div class="container">
+
+                <p>Spill Kits Direct is a dedicated easy to use e-commerce website specialising in Oil Spill Kits, Chemical Spill Kits, Absorbents and Adsorbents and Oil and Chemical Absorbents online.</p>
+                <p>We aim to provide all your pollution control requirements for small to large size oil, chemical and general maintenance spills in the work place.</p>
+                <p>Our containment products range from small oil absorbent pads and adsorbents to clean up spills in a workshop, through to large oil spill kits for use on super tankers at sea.</p>
+                <p>Spill Kits Direct offers competitively priced, quality assured products with a very high level of service, expertise and technical assistance from people within the industry.</p>
+
+            </div>
+        </section>
+        <!-- FEATURED PRODUCTS -->
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="application/ld+json">
+        {
+          "@context": "http://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "item": {
+              "@id": "{{ path('about_us') }}",
+              "name": "About Us",
+              "image": "{{ absolute_url(asset('assets/images/logo.png')) }}"
+            }
+          }]
+        }
+    </script>
+
+{% endblock %}

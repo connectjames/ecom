@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <style type="text/css">
+        body,
+        html,
+        body {background: #fff !important;margin: 0; padding: 0; min-width: 100%!important; color: #000; font-size: 20px; font-family: arial,sans-serif;}
+        .content {width: 100%; max-width: 1200px;}
+        h1 {color: #000; font-size: 40px;}
+        hr {}
+        th {background: #000; color: #fff; padding: 10px; border: 1px solid #fff;}
+        .panel-default {border: 0;}
+        .page {overflow: hidden; page-break-after: always;}
+    </style>
+</head>
+<body>
+{% for order in orders %}
+<div class="panel panel-default page">
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+        <td width="600">
+            <a href="{{ absolute_url(path('index')) }}"><img src="{{ absolute_url(asset('assets/images/logo.png')) }}" alt="{{ company_name }} Logo" width="300"></a>
+        </td>
+        <td>
+            Company Address
+        </td>
+    </tr>
+</table>
+
+<h1>Delivery Note</h1>
+
+<p>
+    {{ company_name }} Online Sales Order<br>
+    Order ID: {{ order.id }}<br>
+    Customer Details:<br>
+    {% if order.deliveryAddress["company"] %}Company Name: {{ order.deliveryAddress["company"] }}{% endif %}<br>
+    {{ order.deliveryAddress["firstName"] }} {{ order.deliveryAddress["lastName"] }},<br>
+    {{ order.deliveryAddress["address1"] }},<br>
+    {% if order.deliveryAddress["address2"] %}{{ order.deliveryAddress["address2"] }},<br>{% endif %}
+    {{ order.deliveryAddress["city"] }},<br>
+    {{ order.deliveryAddress["postcode"] }},<br>
+    Email: {{ order.email }}<br>
+    Phone: {{ order.deliveryAddress["phone"] }}<br>
+    Purchase Order:<br>
+    -------------------<br>
+    {% for item in order.orderDescription %}
+        Product ID: {{ item["id"] }}<br>
+        Product Name: {{ item["name"] }}<br>
+        Quantity: {{ item["quantity"] }}<br>
+        SKU: {{ item["sku"] }}<br>
+        -------------------<br>
+    {% endfor %}
+    {% if order.comment %}
+        Comments:<br>
+        {{ order.comment }}<br>
+    {% endif %}
+</p>
+
+<center><b>Thank you for purchasing from {{ company_name }}</b></center>
+</div>
+{% endfor %}
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <title>{% block metaTitle %}{% endblock %}ConnectJames Admin</title>
+    <meta name="description" content="" />
+    <meta name="Author" content="Jame Davison [www.connectjames.com]" />
+
+    <!-- mobile settings -->
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=0" />
+
+    {% block stylesheets %}
+        <!-- WEB FONTS -->
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700,800&amp;subset=latin,latin-ext,cyrillic,cyrillic-ext" rel="stylesheet" type="text/css" />
+
+        <!-- CORE CSS -->
+        <link href="{{ asset('assets/backend-client/plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+
+        <!-- THEME CSS -->
+        <link href="{{ asset('assets/backend-client/css/essentials.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/backend-client/css/layout.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/backend-client/css/color_scheme/green.css') }}" rel="stylesheet" type="text/css" id="color_scheme" />
+        <link href="{{ asset('assets/backend-client/css/custom.css') }}" rel="stylesheet" type="text/css" id="color_scheme" />
+    {% endblock %}
+
+</head>
+<!--
+    .boxed = boxed version
+-->
+<body>
+
+
+    <!-- WRAPPER -->
+    <div id="wrapper" class="clearfix">
+
+        <!--
+            ASIDE
+            Keep it outside of #wrapper (responsive purpose)
+        -->
+        <aside id="aside">
+            <!--
+                Always open:
+                <li class="active alays-open">
+
+                LABELS:
+                    <span class="label label-danger pull-right">1</span>
+                    <span class="label label-default pull-right">1</span>
+                    <span class="label label-warning pull-right">1</span>
+                    <span class="label label-success pull-right">1</span>
+                    <span class="label label-info pull-right">1</span>
+            -->
+            <nav id="sideNav"><!-- MAIN MENU -->
+                <ul class="nav nav-list">
+                    <li {% block menu_dashboard_active %}{% endblock %}><!-- dashboard -->
+                        <a class="dashboard" href="{{ path('index_admin') }}">
+                            <i class="main-icon fa fa-dashboard"></i> <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li {% block menu_orders_active %}{% endblock %}><!-- orders -->
+                        <a class="dashboard" href="{{ path('orders') }}">
+                            <i class="main-icon fa fa-gbp"></i> <span>Orders</span>
+                        </a>
+                    </li>
+                    <li {% block menu_catalogue_active %}{% endblock %}><!-- catalogue -->
+                        <a href="#">
+                            <i class="fa fa-menu-arrow pull-right"></i>
+                            <i class="main-icon fa fa-bar-chart-o"></i> <span>Catalogue</span>
+                        </a>
+                        <ul><!-- submenus -->
+                            <li {% block menu_products_active %}{% endblock %}><a href="{{ path('products') }}">Products</a></li><!-- product -->
+                            <li {% block menu_categories_active %}{% endblock %}><a href="{{ path('categories') }}">Categories</a></li><!-- category -->
+                        </ul>
+                    </li>
+                    <li {% block menu_clients_active %}{% endblock %}><!-- clients -->
+                        <a class="dashboard" href="{{ path('clients') }}">
+                            <i class="main-icon fa fa-users"></i> <span>Clients</span>
+                        </a>
+                    </li>
+                    <li {% block menu_delivery_active %}{% endblock %}><!-- shipping -->
+                        <a class="dashboard" href="{{ path('deliveries') }}">
+                            <i class="main-icon fa fa-paper-plane"></i> <span>Delivery</span>
+                        </a>
+                    </li>
+                    {#<li {% block menu_redirection_active %}{% endblock %}><!-- shipping -->#}
+                        {#<a class="dashboard" href="{{ path('redirects') }}">#}
+                            {#<i class="main-icon fa fa-arrow-right"></i> <span>Redirects</span>#}
+                        {#</a>#}
+                    {#</li>#}
+                </ul>
+            </nav>
+
+            <span id="asidebg"><!-- aside fixed background --></span>
+        </aside>
+        <!-- /ASIDE -->
+
+
+        <!-- HEADER -->
+        <header id="header">
+
+            <!-- Mobile Button -->
+            <button id="mobileMenuBtn"></button>
+
+            <!-- Logo -->
+            <span class="logo pull-left">
+                        <img src="{{ asset('assets/backend-client/images/logo_light.png') }}" alt="admin panel" height="35" />
+                    </span>
+
+            <nav>
+
+                <!-- OPTIONS LIST -->
+                <ul class="nav pull-right">
+
+                    <!-- USER OPTIONS -->
+                    <li class="dropdown pull-left">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                            <img class="user-avatar" alt="" src="{{ asset('assets/backend-client/images/noavatar.jpg') }}" height="34" />
+                            <span class="user-name">
+                                        <span class="hidden-xs">
+                                            {{ app.user.firstName }} {{ app.user.lastName }} <i class="fa fa-angle-down"></i>
+                                        </span>
+                                    </span>
+                        </a>
+                        <ul class="dropdown-menu hold-on-click">
+                            <li><!-- lockscreen -->
+                                <a href="{{ path('index') }}"><i class="fa fa-back"></i> Home page</a>
+                            </li>
+                            <li><!-- logout -->
+                                <a href="{{ path('security_logout') }}"><i class="fa fa-power-off"></i> Log Out</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- /USER OPTIONS -->
+
+                </ul>
+                <!-- /OPTIONS LIST -->
+
+            </nav>
+
+        </header>
+        <!-- /HEADER -->
+
+        <!--
+            MIDDLE
+        -->
+        <section id="middle">
+            {% block body %}
+            {% endblock %}
+        </section>
+        <!-- /MIDDLE -->
+
+    </div>
+    {% block javascripts %}
+
+        <!-- JAVASCRIPT FILES -->
+        <script type="text/javascript">var plugin_path = '{{ asset('assets/backend-client/plugins/') }}';</script>
+        <script type="text/javascript" src="{{ asset('assets/backend-client/plugins/jquery/jquery-2.2.3.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/backend-client/js/app.js') }}"></script>
+
+        <script type="text/javascript" src="{{ asset('assets/backend-client/plugins/bootstrap/js/bootstrap.min.js') }}"></script>
+
+        <!-- PAGE LEVEL SCRIPT -->
+        {% for msg in app.session.flashbag.get('success') %}
+        <script type="text/javascript">
+            _toastr("{{ msg }}","top-full-width","success",false);
+        </script>
+        {% endfor %}
+        {% for msg in app.session.flashbag.get('info') %}
+        <script type="text/javascript">
+            _toastr("{{ msg }}","top-full-width","info",false);
+        </script>
+        {% endfor %}
+        {% for msg in app.session.flashbag.get('danger') %}
+        <script type="text/javascript">
+            _toastr("{{ msg }}","top-full-width","primary",false);
+        </script>
+        {% endfor %}
+        {% for msg in app.session.flashbag.get('warning') %}
+        <script type="text/javascript">
+            _toastr("{{ msg }}","top-full-width","warning",false);
+        </script>
+        {% endfor %}
+        {% for msg in app.session.flashbag.get('notification') %}
+        <script type="text/javascript">
+            _toastr("{{ msg }}","top-full-width","notification",false);
+        </script>
+        {% endfor %}
+
+    {% endblock %}
+</body>
+</html>

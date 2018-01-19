@@ -1,0 +1,189 @@
+{% extends 'base.html.twig' %}
+{% block metaTitle %}Contact Us{% endblock %}
+{% block metaKeywords %}contact {{ company_keywords }}, {{ company_keywords }} contact us{% endblock %}
+{% block metaDescription %}Contact us - Contact {{ company_name }}, call us on {{ company_number }} for our expert advice.{% endblock %}
+{% block canonical %}{{ absolute_url(path('contact_us')) }}{% endblock %}
+{% block body %}
+    <div id="contact-us">
+
+        <section class="page-header page-header-xs">
+            <div class="container">
+
+                <h1>Contact Us</h1>
+
+                <!-- breadcrumbs -->
+                <ol class="breadcrumb">
+                    <li><a href="{{ path('index') }}">Home</a></li>
+                    <li class="active"><a href="{{ path('contact_us') }}">Contact Us</a></li>
+                </ol><!-- /breadcrumbs -->
+
+            </div>
+        </section>
+        <!-- /PAGE HEADER -->
+
+        <!-- CONTACT US -->
+        <section>
+            <div class="container">
+
+                <div class="row">
+
+                    <!-- FORM -->
+                    <div class="col-md-8 col-sm-8">
+
+                        <h3>Please contact us below:</h3>
+
+                        {{ form_start(formContactUs, { 'attr': {'id': 'contact_us_form'} }) }}
+                            <fieldset>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div class="col-md-4">
+                                            <label for="contact:name">Full Name *</label>
+                                            {{ form_row(formContactUs.fullName) }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="contact:email">E-mail Address *</label>
+                                            {{ form_row(formContactUs.email) }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="contact:phone">Phone</label>
+                                            {{ form_row(formContactUs.phone) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <label for="contact:message">Message *</label>
+                                            {{ form_row(formContactUs.message, { 'attr': {'class': 'height-150'} }) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            {{ form_row(formContactUs.captcha) }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </fieldset>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button
+                                            type="submit"
+                                            id='recaptcha'
+                                            class="g-recaptcha btn btn-primary pull-right"
+                                            data-sitekey="6Lfa-CEUAAAAAKcfxPZFlw0QO3sOZ6TjNDsYX2Fl"
+                                            data-callback="onSubmit"
+                                            data-size="invisible">
+                                        <i class="fa fa-check"></i>
+                                        SEND MESSAGE
+                                    </button>
+                                </div>
+                            </div>
+                        {{ form_end(formContactUs) }}
+
+                    </div>
+                    <!-- /FORM -->
+
+
+                    <!-- INFO -->
+                    <div class="col-md-4 col-sm-4">
+
+                        <h2>Visit Us</h2>
+
+                        <!--
+                        Available heights
+                            height-100
+                            height-150
+                            height-200
+                            height-250
+                            height-300
+                            height-350
+                            height-400
+                            height-450
+                            height-500
+                            height-550
+                            height-600
+                        -->
+                        <div id="map2" class="height-400 grayscale"></div>
+
+                        <hr />
+
+                        <p>
+                            <span class="block"><strong><i class="fa fa-map-marker"></i> Address:</strong> OPEC House, Martin St, Birstall, Batley, West Yorkshire, WF17 9PJ</span>
+                            <span class="block"><strong><i class="fa fa-phone"></i> Phone:</strong> <a href="tel:00441924442701">+44 (0)1924 442701</a></span>
+                            <span class="block"><strong><i class="fa fa-envelope"></i> Email:</strong> <a href="mailto:sales@spill-kits-direct.co.uk">sales@spill-kits-direct.co.uk</a></span>
+                        </p>
+
+                    </div>
+                    <!-- /INFO -->
+
+                </div>
+
+            </div>
+        </section>
+        <!-- CONTACT US -->
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+
+    <!--
+			GMAP.JS
+			http://hpneo.github.io/gmaps/
+		-->
+    <script type="text/javascript" src="//maps.google.com/maps/api/js?key=AIzaSyCqCn84CgZN6o1Xc3P4dM657HIxkX3jzPY"></script>
+    <script type="text/javascript" src="{{ asset('assets/frontend-client/plugins/gmaps.js') }}"></script>
+    <script type="text/javascript">
+
+        jQuery(document).ready(function(){
+
+            /**
+             @BASIC GOOGLE MAP
+             **/
+            var map2 = new GMaps({
+                div: '#map2',
+                lat: 53.731469,
+                lng: -1.66523,
+                scrollwheel: false
+            });
+
+            var marker = map2.addMarker({
+                lat: 53.731469,
+                lng: -1.66523,
+                title: 'Company, Inc.'
+            });
+        });
+
+    </script>
+
+    <script type="application/ld+json">
+        {
+          "@context": "http://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "item": {
+              "@id": "{{ path('contact_us') }}",
+              "name": "Contact Us",
+              "image": "{{ absolute_url(asset('assets/images/logo.png')) }}"
+            }
+          }]
+        }
+        {
+          "@context": "http://schema.org",
+          "@type": "Organization",
+          "url": "{{ absolute_url(path('index')) }}",
+          "logo": "{{ absolute_url(asset('assets/images/logo.png')) }}",
+          "contactPoint": [{
+            "@type": "ContactPoint",
+            "telephone": "{{ company_number }}",
+            "contactType": "customer service"
+          }]
+        }
+    </script>
+
+{% endblock %}

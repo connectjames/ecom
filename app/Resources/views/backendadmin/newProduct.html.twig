@@ -1,0 +1,466 @@
+{% extends 'baseAdmin.html.twig' %}
+{% block metaTitle %}New Product {% endblock %}
+{% block menu_catalogue_active %}class="active"{% endblock %}
+{% block menu_products_active %}class="active"{% endblock %}
+{% block body %}
+<!-- page title -->
+<header id="page-header">
+    <h1>Products</h1>
+    <ol class="breadcrumb">
+        <li><a href="{{ path('products') }}">Products</a></li>
+        <li class="active">New Product</li>
+    </ol>
+</header>
+<!-- /page title -->
+<div id="content" class="padding-20">
+    <!--
+                            PANEL CLASSES:
+                                panel-default
+                                panel-danger
+                                panel-warning
+                                panel-info
+                                panel-success
+
+                            INFO: 	panel collapse - stored on user localStorage (handled by app.js _panels() function).
+                                    All pannels should have an unique ID or the panel collapse status will not be stored!
+                        -->
+    <div id="product" class="panel panel-default">
+        <div class="panel-heading">
+            <strong class="center-text">New product</strong>
+        </div>
+
+        {{ form_start(formProduct) }}
+
+        <!-- panel content -->
+        <div class="panel-body">
+            <div id="top-bar-action" class="alert alert-info margin-bottom-30 action-table">
+                <div class="pull-right">
+                    <button type="submit" class="btn btn-success">Save new Product</button>
+                </div>
+            </div>
+        </div>
+        <!-- /panel content -->
+
+        <div class="col-md-6 top-space">
+
+            <!-- -- -->
+            <div id="main-details" class="panel panel-default">
+
+                <div class="panel-heading">
+
+                        <span class="elipsis"><!-- panel title -->
+                            <strong>Main Details</strong>
+                        </span>
+
+                    <!-- right options -->
+                    <ul class="options pull-right list-inline">
+                        <li><a href="#" class="opt panel_colapse" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Colapse"></a></li>
+                        <li><a href="#" class="opt panel_fullscreen hidden-xs" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand"></i></a></li>
+                    </ul>
+                    <!-- /right options -->
+
+                </div>
+
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="form-group">
+                                <label for="name" class="control-label required">Name*</label>
+                                <div id="charNumName" class="pull-right"></div>
+                                {{ form_row(formProduct.name) }}
+                            </div>
+                            <div class="form-group">
+                                <label for="sku" class="control-label required">SKU*</label>
+                                {{ form_row(formProduct.sku) }}
+                            </div>
+                            <div class="form-group">
+                                <label for="price" class="control-label required">Price*</label>
+                                {{ form_row(formProduct.price) }}
+                            </div>
+                            <div class="form-group">
+                                <label for="weight" class="control-label required">Weight*</label>
+                                {{ form_row(formProduct.weight) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- / -->
+
+        </div>
+
+        <div class="col-md-6 top-space">
+
+            <!-- -- -->
+            <div id="seo-details" class="panel panel-default">
+
+                <div class="panel-heading">
+
+                        <span class="elipsis"><!-- panel title -->
+                            <strong>SEO Details</strong>
+                        </span>
+
+                    <!-- right options -->
+                    <ul class="options pull-right list-inline">
+                        <li><a href="#" class="opt panel_colapse" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Colapse"></a></li>
+                        <li><a href="#" class="opt panel_fullscreen hidden-xs" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand"></i></a></li>
+                    </ul>
+                    <!-- /right options -->
+
+                </div>
+
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="form-group">
+                                <span data-toggle="tooltip" title="If not entered, it will be self-generated">
+                                    <label for="url" class="control-label required">URL Key</label>
+                                    {{ form_row(formProduct.slug) }}
+                            </div>
+                            <div class="form-group">
+                                <label for="metaTitle" class="control-label required">Meta Title</label>
+                                <div id="charNumTitle" class="pull-right"></div>
+                                {{ form_row(formProduct.metaTitle) }}
+                            </div>
+                            <div class="form-group">
+                                <label for="metaKeywords" class="control-label required">Meta Keywords</label>
+                                {{ form_row(formProduct.metaKeywords) }}
+                            </div>
+                            <div class="form-group">
+                                <label for="metaDescription" class="control-label required">Meta Description</label>
+                                <div id="charNumDesc" class="pull-right"></div>
+                                {{ form_row(formProduct.metaDescription) }}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- / -->
+
+        </div>
+        <div class="col-md-6">
+
+            <!-- -- -->
+            <div id="table-details" class="panel panel-default">
+
+                <div class="panel-heading">
+
+                        <span class="elipsis"><!-- panel title -->
+                            <strong>Specification Details</strong>
+                        </span>
+
+                    <!-- right options -->
+                    <ul class="options pull-right list-inline">
+                        <li><a href="#" class="opt panel_colapse" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Colapse"></a></li>
+                        <li><a href="#" class="opt panel_fullscreen hidden-xs" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand"></i></a></li>
+                    </ul>
+                    <!-- /right options -->
+
+                </div>
+
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="form-group">
+                                <label for="videoTitle" class="control-label required">Video Title</label>
+                                <div class="pull-right charNumSpec"></div>
+                                {{ form_row(formProduct.videoTitle) }}
+                            </div>
+                            <div class="form-group">
+                                <label for="videoLink" class="control-label required">Video Link</label>
+                                <div class="pull-right charNumSpec"></div>
+                                {{ form_row(formProduct.videoLink) }}
+                            </div>
+                            <div class="form-group">
+                                <label for="capacityTable" class="control-label required">Capacity</label>
+                                <div class="pull-right charNumSpec"></div>
+                                {{ form_row(formProduct.capacityTable) }}
+                            </div>
+                            <div class="form-group">
+                                <label for="contentsTable" class="control-label required">Contents</label>
+                                <div class="pull-right charNumSpec"></div>
+                                {{ form_row(formProduct.contentsTable) }}
+                            </div>
+                            <div class="form-group">
+                                <label for="productCodeTable" class="control-label required">Product Code</label>
+                                <div class="pull-right charNumSpec"></div>
+                                {{ form_row(formProduct.productCodeTable) }}
+                            </div>
+                            <div class="form-group">
+                                <label for="weightTable" class="control-label required">Weight</label>
+                                <div class="pull-right charNumSpec"></div>
+                                {{ form_row(formProduct.weightTable) }}
+                            </div>
+                            <div class="form-group">
+                                <label for="dimensionTable" class="control-label required">Packed Dimensions</label>
+                                <div class="pull-right charNumSpec"></div>
+                                {{ form_row(formProduct.dimensionTable) }}
+                            </div>
+                            <div class="form-group">
+                                <label for="descriptionTable" class="control-label required">Description</label>
+                                <div class="pull-right charNumSpec"></div>
+                                {{ form_row(formProduct.descriptionTable) }}
+                            </div>
+                            <div class="form-group">
+                                <label for="packQuantityTable" class="control-label required">Pack quantity</label>
+                                <div class="pull-right charNumSpec"></div>
+                                {{ form_row(formProduct.packQuantityTable) }}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-6">
+
+            <!-- -- -->
+            <div id="image-details" class="panel panel-default">
+
+                <div class="panel-heading">
+
+                            <span class="elipsis"><!-- panel title -->
+                                <strong>Image Details</strong>
+                            </span>
+
+                    <!-- right options -->
+                    <ul class="options pull-right list-inline">
+                        <li><a href="#" class="opt panel_colapse" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Colapse"></a></li>
+                        <li><a href="#" class="opt panel_fullscreen hidden-xs" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand"></i></a></li>
+                    </ul>
+                    <!-- /right options -->
+
+                </div>
+
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <label for="image" class="control-label required">Image</label>
+                            {{ form_row(formProduct.image) }}
+                        </div>
+                        {{ form_errors(formProduct.image) }}
+                    </div>
+                </div>
+            </div>
+            <!-- / -->
+        </div>
+
+        <div class="col-md-6">
+
+            <!-- -- -->
+            <div id="product-details" class="panel panel-default">
+
+                <div class="panel-heading">
+
+                    <span class="elipsis"><!-- panel title -->
+                        <strong>Product Descriptions</strong>
+                    </span>
+
+                    <!-- right options -->
+                    <ul class="options pull-right list-inline">
+                        <li><a href="#" class="opt panel_colapse" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Colapse"></a></li>
+                        <li><a href="#" class="opt panel_fullscreen hidden-xs" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand"></i></a></li>
+                    </ul>
+                    <!-- /right options -->
+
+                </div>
+
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <label for="shortDescription" class="control-label required">Short Description</label>
+                            {{ form_row(formProduct.shortDescription) }}
+                        </div>
+                        <div class="col-md-12 col-sm-12">
+                            <label for="description" class="control-label required">Description</label>
+                            {{ form_row(formProduct.description) }}
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- / -->
+
+        </div>
+
+        <div class="clear-both"></div>
+
+        <div class="col-md-4">
+
+            <!-- -- -->
+            <div id="allocation-details" class="panel panel-default">
+
+                <div class="panel-heading">
+
+                    <span class="elipsis"><!-- panel title -->
+                        <strong>Dropshipper*</strong>
+                    </span>
+
+                    <!-- right options -->
+                    <ul class="options pull-right list-inline">
+                        <li><a href="#" class="opt panel_colapse" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Colapse"></a></li>
+                        <li><a href="#" class="opt panel_fullscreen hidden-xs" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand"></i></a></li>
+                    </ul>
+                    <!-- /right options -->
+
+                </div>
+
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            {{ form_row(formProduct.dropshipper) }}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+
+            <!-- -- -->
+            <div id="related-products" class="panel panel-default">
+
+                <div class="panel-heading">
+
+                    <span class="elipsis"><!-- panel title -->
+                        <strong>Categories Allocation</strong>
+                    </span>
+
+                    <!-- right options -->
+                    <ul class="options pull-right list-inline">
+                        <li><a href="#" class="opt panel_colapse" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Colapse"></a></li>
+                        <li><a href="#" class="opt panel_fullscreen hidden-xs" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand"></i></a></li>
+                    </ul>
+                    <!-- /right options -->
+
+                </div>
+
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="panel-body">
+                                <div class="row">
+
+                                    <div class="table-scrollable">
+                                        <table class="table table-striped table-bordered table-hover table-responsive" id="datatable_sample">
+                                            <thead>
+                                            <tr>
+                                                <th class="col-sm-12">Category Name</th>
+                                            </tr>
+                                            </thead>
+
+                                            <tbody
+                                                    data-prototype="{{ form_widget(formProduct.categories.vars.prototype)|e('html_attr') }}"
+                                                    data-index="{{ formProduct.categories|length }}"
+                                            >
+                                            <tr class="odd gradeX">
+                                                <td>
+                                                    <a href="#" class="js-add-category">
+                                                        <span class="fa fa-plus-circle"></span>
+                                                        Add Another Category
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- / -->
+        </div>
+
+        <div class="col-md-4">
+
+            <!-- -- -->
+            <div id="related-products" class="panel panel-default">
+
+                <div class="panel-heading">
+
+                    <span class="elipsis"><!-- panel title -->
+                        <strong>Related Products</strong>
+                    </span>
+
+                    <!-- right options -->
+                    <ul class="options pull-right list-inline">
+                        <li><a href="#" class="opt panel_colapse" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Colapse"></a></li>
+                        <li><a href="#" class="opt panel_fullscreen hidden-xs" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand"></i></a></li>
+                    </ul>
+                    <!-- /right options -->
+
+                </div>
+
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="panel-body">
+                                <div class="row">
+
+                                    <div class="table-scrollable">
+                                        <table class="table table-striped table-bordered table-hover table-responsive" id="datatable_sample">
+                                            <thead>
+                                            <tr>
+                                                <th class="col-sm-12">Product Name</th>
+                                            </tr>
+                                            </thead>
+
+                                            <tbody
+                                                    data-prototype="{{ form_widget(formProduct.parentProducts.vars.prototype)|e('html_attr') }}"
+                                                    data-index="{{ formProduct.parentProducts|length }}"
+                                            >
+                                            <tr class="odd gradeX">
+                                                <td>
+                                                    <a href="#" class="js-add-product">
+                                                        <span class="fa fa-plus-circle"></span>
+                                                        Add Another Product
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- / -->
+        </div>
+
+        {{ form_end(formProduct) }}
+
+    </div>
+    <!-- /PANEL -->
+</div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="text/javascript" src="{{ asset('min/index.php?f=assets/backend-client/plugins/jquery/jquery-ui.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('min/index.php?f=assets/backend-client/plugins/selectize/selectize.min.js') }}"></script>
+
+    <script src="{{ asset('min/index.php?f=assets/backend-client/js/custom/NewViewCatProd.js') }}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var $product = $('#product');
+
+            var newViewCatProd = new NewViewCatProd($product);
+        });
+        
+    </script>
+{% endblock %}

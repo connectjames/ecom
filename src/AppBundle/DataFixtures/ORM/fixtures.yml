@@ -1,0 +1,72 @@
+AppBundle\Entity\Product:
+    product_{1..200}:
+        sku: <numberBetween(1, 300)>
+        name: <word()>
+        metaKeywords: <word()>
+        metaDescription: <word()>
+        dropshipper: '@dropshipper_*'
+        display: true
+        price: <numberBetween(1, 300)>
+        imageName: 'product-image.jpg'
+        shortDescription: <sentence()>
+        description: <paragraph()>
+        dimension: 20x20x20
+        weight: <numberBetween(1, 20)>
+        featured: <numberBetween(0, 1)>
+
+AppBundle\Entity\Category:
+    category_{1..10}:
+        name: <word()>
+        description: <paragraph()>
+        metaDescription: <sentence()>
+        metaKeywords: <word()>
+        image: <imageUrl(100, 100, 'abstract')>
+        categoryProducts: '30x @product_*'
+        display: true
+        imageName: 'category-image.jpg'
+
+AppBundle\Entity\Dropshipper:
+    dropshipper_{1..10}:
+        name: <word()>
+        email: connectjames+<current()>@gmail.com
+
+AppBundle\Entity\Delivery:
+    delivery_{1..4}:
+        name: <word()>
+        amount: '{"2":2.9,"4":4,"8":5,"20":10}'
+
+AppBundle\Entity\User:
+    user_{1..100}:
+        createdAt: <dateTimeBetween('-5 years', 'now')>
+        email: connectjames+<current()>@gmail.com
+        plainPassword: iliketurtles
+        roles: ['ROLE_ADMIN']
+        firstName: <firstName()>
+        lastName: <name()>
+        invoiceAddress: '{"firstName":"<firstName()>","lastName":"<name()>","company":"","address1":"<streetAddress()>","address2":"","city":"<city()>","postcode":"<postcode()>","phone":"<phoneNumber()>"}'
+        deliveryAddress: '{"delivery":[{"firstName":"<firstName()>","lastName":"<name()>","company":"","address1":"<streetAddress()>","address2":"","city":"<city()>","postcode":"<postcode()>","phone":"<phoneNumber()>"},{"firstName":"<firstName()>","lastName":"<name()>","company":"","address1":"<streetAddress()>","address2":"","city":"<city()>","postcode":"<postcode()>","phone":"<phoneNumber()>"}]}'
+
+AppBundle\Entity\Order:
+    order_{1..500}:
+        user: '@user_*'
+        createdAt: <dateTimeBetween('-5 years', 'now')>
+        dispatchedAt: <dateTimeBetween('-4 years', 'now')>
+        orderDescription: '[{"id":<numberBetween(1, 20)>,"name":"<name()>","price":<numberBetween(1, 20)>,"quantity":<numberBetween(1, 20)>,"image":"","total":<numberBetween(1, 20)>},{"id":<numberBetween(1, 20)>,"name":"<name()>","price":<numberBetween(1, 20)>,"quantity":<numberBetween(1, 20)>,"image":"","total":<numberBetween(1, 20)>}]'
+        email: connectjames+<current()>@gmail.com
+        deliveryAmount: <numberBetween(1, 20)>
+        orderAmount: <numberBetween(1, 20)>
+        firstName: <firstName()>
+        lastName: <name()>
+        invoiceAddress: '{"firstName":"<firstName()>","lastName":"<name()>","company":"","address1":"<streetAddress()>","address2":"","city":"<city()>","postcode":"<postcode()>","phone":"<phoneNumber()>"}'
+        deliveryAddress: '{"firstName":"<firstName()>","lastName":"<name()>","company":"","address1":"<streetAddress()>","address2":"","city":"<city()>","postcode":"<postcode()>","phone":"<phoneNumber()>"}'
+        token: <numberBetween(10000, 200000)>
+        status: '@status_*'
+
+AppBundle\Entity\Status:
+    status_{1}:
+        name: <status()>
+
+AppBundle\Entity\Surcharge:
+    surcharge{1}:
+        postcode: 'HD2'
+        amount: <numberBetween(1, 20)>

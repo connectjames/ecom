@@ -1,0 +1,473 @@
+{% extends 'base.html.twig' %}
+{% block metaTitle %}Your Details{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('assets/backend-client/plugins/jquery-confirm/jquery-confirm.min.css') }}" rel="stylesheet" type="text/css"
+          />
+{% endblock %}
+{% block body %}
+    <div id="details">
+        <section>
+            <div class="container">
+
+                <!-- RIGHT -->
+                <div class="col-lg-9 col-md-9 col-sm-8 col-lg-push-3 col-md-push-3 col-sm-push-4 margin-bottom-80">
+
+                    <div class="tab-content">
+
+                        <!-- INVOICE TAB -->
+                        <div class="tab-pane fade in active" id="invoice">
+
+                            <div class="box-static box-transparent box-bordered padding-30">
+
+                                {{ form_start(formEditAddressInvoice) }}
+                                <fieldset class="nomargin sky-form">
+
+                                    <div class="row">
+                                        <div class="form-group">
+
+                                            <div class="col-md-6 col-sm-6">
+                                                <label>First Name*</label>
+                                                <label class="input margin-bottom-10">
+                                                    <i class="ico-append fa fa-user"></i>
+                                                    {{ form_row(formEditAddressInvoice.firstName,
+                                                    {'value' : app.user.firstName }
+                                                    ) }}
+                                                </label>
+                                            </div>
+
+                                            <div class="col-md-6 col-sm-6">
+                                                <label>Last Name*</label>
+                                                <label class="input margin-bottom-10">
+                                                    <i class="ico-append fa fa-user"></i>
+                                                    {{ form_row(formEditAddressInvoice.lastName,
+                                                    {'value' : app.user.lastName }
+                                                    ) }}
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="form-group">
+
+                                            <div class="col-md-6 col-sm-6">
+                                                <label>Company</label>
+                                                <label class="input margin-bottom-10">
+                                                    <i class="ico-append fa fa-user"></i>
+                                                    {{ form_row(formEditAddressInvoice.company,
+                                                    {'value' : app.user.invoiceAddress['company'] }
+                                                    ) }}
+                                                </label>
+                                            </div>
+
+                                            <div class="col-md-6 col-sm-6">
+                                                <label>Phone*</label>
+                                                <label class="input margin-bottom-10">
+                                                    <i class="ico-append fa fa-phone"></i>
+                                                    {{ form_row(formEditAddressInvoice.phone,
+                                                    {'value' : app.user.invoiceAddress['phone'] }
+                                                    ) }}
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="form-group">
+
+                                            <div class="col-md-12 col-sm-12">
+                                                <label>Address*</label>
+                                                <label class="input margin-bottom-10">
+                                                    <i class="ico-append fa fa-envelope"></i>
+                                                    {{ form_row(formEditAddressInvoice.address1,
+                                                    {'value' : app.user.invoiceAddress['address1'] }
+                                                    ) }}
+                                                </label>
+                                            </div>
+
+                                            <div class="col-md-12 col-sm-12">
+                                                <label class="input margin-bottom-10">
+                                                    <i class="ico-append fa fa-envelope"></i>
+                                                    {{ form_row(formEditAddressInvoice.address2,
+                                                    {'value' : app.user.invoiceAddress['address2'] }
+                                                    ) }}
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="form-group">
+
+                                            <div class="col-md-6 col-sm-6">
+                                                <label>City*</label>
+                                                <label class="input margin-bottom-10">
+                                                    <i class="ico-append fa fa-envelope"></i>
+                                                    {{ form_row(formEditAddressInvoice.city,
+                                                    {'value' : app.user.invoiceAddress['city'] }
+                                                    ) }}
+                                                </label>
+                                            </div>
+
+                                            <div class="col-md-6 col-sm-6 color">
+                                                <label>Postcode*</label>
+                                                <label class="input margin-bottom-10">
+                                                    <i class="ico-append fa fa-envelope"></i>
+                                                    {{ form_row(formEditAddressInvoice.postcode,
+                                                    {'value' : app.user.invoiceAddress['postcode'] }
+                                                    ) }}
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <hr />
+
+                                </fieldset>
+
+                                <div class="row">
+                                    <div class="col-md-12 text-right">
+                                        <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i> Save new invoice details</button>
+                                    </div>
+                                </div>
+
+                                {{ form_end(formEditAddressInvoice) }}
+
+                            </div>
+
+                        </div>
+                        <!-- /INVOICE TAB -->
+
+                        <!-- DELIVERY TAB -->
+                        <div class="tab-pane fade in" id="delivery">
+
+                            <div class="box-static box-transparent box-bordered padding-30">
+
+                                {% if app.user.deliveryAddress|length %}
+                                    {{ form_start(formEditAddressDelivery) }}
+
+                                    <div class="js-delivery-address row">
+                                        {% if app.user.deliveryAddress|length %}
+                                            <select id="saved-addresses" title="saved-addresses" class="form-control select2 fullwidth">
+                                                {% for i in 0..app.user.deliveryAddress|length - 1 %}
+                                                    <option value="{{ path('select_different_address_saved', {
+                                                        id: i
+                                                    }) }}">
+                                                        {{ app.user.deliveryAddress[i]['firstName'] }}
+                                                        {{ app.user.deliveryAddress[i]['lastName'] }},
+                                                        {{ app.user.deliveryAddress[i]['address1'] }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        {% endif %}
+                                        <br>
+                                        <i class="size-12">Any new delivery addresses used to checkout will automatically be saved</i>
+                                    </div>
+
+                                        <div class="js-form-fields">
+
+                                            <fieldset data-id="0" class="nomargin sky-form">
+
+                                                <div class="row">
+                                                    <div class="form-group">
+
+                                                        <div class="col-md-6 col-sm-6">
+                                                            <label>First Name*</label>
+                                                            <label class="input margin-bottom-10">
+                                                                <i class="ico-append fa fa-user"></i>
+                                                                {{ form_row(formEditAddressDelivery.firstName,
+                                                                {'value' : app.user.deliveryAddress[0]["firstName"] }
+                                                                ) }}
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="col-md-6 col-sm-6">
+                                                            <label>Last Name*</label>
+                                                            <label class="input margin-bottom-10">
+                                                                <i class="ico-append fa fa-user"></i>
+                                                                {{ form_row(formEditAddressDelivery.lastName,
+                                                                {'value' : app.user.deliveryAddress[0]["lastName"] }
+                                                                ) }}
+                                                            </label>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="form-group">
+
+                                                        <div class="col-md-6 col-sm-6">
+                                                            <label>Company</label>
+                                                            <label class="input margin-bottom-10">
+                                                                <i class="ico-append fa fa-user"></i>
+                                                                {{ form_row(formEditAddressDelivery.company,
+                                                                {'value' : app.user.deliveryAddress[0]["company"] }
+                                                                ) }}
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="col-md-6 col-sm-6">
+                                                            <label>Phone*</label>
+                                                            <label class="input margin-bottom-10">
+                                                                <i class="ico-append fa fa-phone"></i>
+                                                                {{ form_row(formEditAddressDelivery.phone,
+                                                                {'value' : app.user.deliveryAddress[0]["phone"] }
+                                                                ) }}
+                                                            </label>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="form-group">
+
+                                                        <div class="col-md-12 col-sm-12">
+                                                            <label>Address*</label>
+                                                            <label class="input margin-bottom-10">
+                                                                <i class="ico-append fa fa-envelope"></i>
+                                                                {{ form_row(formEditAddressDelivery.address1,
+                                                                {'value' : app.user.deliveryAddress[0]["address1"] }
+                                                                ) }}
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="col-md-12 col-sm-12">
+                                                            <label class="input margin-bottom-10">
+                                                                <i class="ico-append fa fa-envelope"></i>
+                                                                {{ form_row(formEditAddressDelivery.address2,
+                                                                {'value' : app.user.deliveryAddress[0]["address2"] }
+                                                                ) }}
+                                                            </label>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="form-group">
+
+                                                        <div class="col-md-6 col-sm-6">
+                                                            <label>City*</label>
+                                                            <label class="input margin-bottom-10">
+                                                                <i class="ico-append fa fa-envelope"></i>
+                                                                {{ form_row(formEditAddressDelivery.city,
+                                                                {'value' : app.user.deliveryAddress[0]["city"] }
+                                                                ) }}
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="col-md-6 col-sm-6 color">
+                                                            <label>Postcode*</label>
+                                                            <label class="input margin-bottom-10">
+                                                                <i class="ico-append fa fa-envelope"></i>
+                                                                {{ form_row(formEditAddressDelivery.postcode,
+                                                                {'value' : app.user.deliveryAddress[0]["postcode"] }
+                                                                ) }}
+                                                            </label>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <hr />
+
+                                            </fieldset>
+
+                                            <div class="col-md-6 text-left">
+                                                <a class="btn btn-danger" href="{{ path('delete_address_saved', {'id': 0}) }}"><i class="fa fa-check"></i> Delete delivery address details</a>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6 text-right">
+                                            <button type="submit" data-url="{{ path('save_address_saved') }}" class="js-delivery-details btn btn-primary"><i class="fa fa-check"></i> Save delivery address details</button>
+                                        </div>
+
+                                    {{ form_end(formEditAddressDelivery) }}
+                                {% else %}
+                                    <i class="size-12">Any new delivery addresses used to checkout will automatically be saved here</i>
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+                        <!-- /DELIVERY TAB -->
+
+                        <!-- ORDER TAB -->
+                        <div class="tab-pane fade in" id="history">
+
+                            <div class="box-static box-transparent box-bordered padding-30">
+
+                                {% for order in app.user.orders %}
+                                    <h2>Order {{ order.id }}</h2>
+
+                                    <div class="table-responsive">
+                                        <table class="table table-condensed nomargin">
+                                            <thead>
+                                            <tr>
+                                                <th width="10%">ID</th>
+                                                <th width="60%">Item Name</th>
+                                                <th width="10%">Quantity</th>
+                                                <th width="10%">Unit Price</th>
+                                                <th width="10%">Buy</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for item in order.orderDescription %}
+                                                <tr>
+                                                    <td>{{ item["id"] }}</td>
+                                                    <td>{{ item["name"] }}</td>
+                                                    <td>{{ item["quantity"] }}</td>
+                                                    <td>£ {{ item["price"]|number_format(2, '.', ',') }}</td>
+                                                    <td>
+                                                        <form name='{{ item.id }}' class="flexslider" method="get">
+                                                            <input id="add_to_basket_form_id" name="id" required="required" value="{{ item.id }}" type="hidden">
+                                                            <button type="submit" class="btn btn-primary">
+                                                                <i class="fa fa-cart-plus size-18"></i>
+                                                            </button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <hr>
+
+                                    <a href="{{ path('my-account_invoice', {'id': order.id}) }}" class="btn btn-primary btn-lg btn-block size-15">Print Invoice</a>
+
+                                    <hr>
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+                        <!-- /ORDER TAB -->
+
+                        <!-- PASSWORD TAB -->
+                        <div class="tab-pane fade in" id="password">
+
+                            <div class="box-static box-transparent box-bordered padding-30">
+
+                                {{ form_start(formUserForgotPassword) }}
+                                <div class="clearfix sky-form">
+
+                                    <!-- Passwords -->
+                                    <div class="form-group">
+
+                                        <div class="col-md-6 col-sm-6">
+                                            <label class="input margin-bottom-10">
+                                                {{ form_row(formUserForgotPassword.plainPassword.first, {
+                                                    'label': 'New password*'
+                                                }) }}
+                                            </label>
+                                        </div>
+
+                                        <div class="col-md-6 col-sm-6">
+                                            <label class="input margin-bottom-10">
+                                                {{ form_row(formUserForgotPassword.plainPassword.second, {
+                                                    'label': 'Password Again*'
+                                                }) }}
+                                            </label>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-12 col-sm-12 col-xs-12 text-right">
+
+                                        <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i> Submit</button>
+
+                                    </div>
+
+                                </div>
+                                {{ form_end(formUserForgotPassword) }}
+
+                            </div>
+
+                        </div>
+                        <!-- /PASSWORD TAB -->
+
+                    </div>
+
+                </div>
+
+
+                <!-- LEFT -->
+                <div class="col-lg-3 col-md-3 col-sm-4 col-lg-pull-9 col-md-pull-9 col-sm-pull-8">
+
+                    <div class="thumbnail text-center">
+                        <h2 class="size-18 margin-top-10 margin-bottom-0">Welcome Back {{ user.firstName }} {{ user.lastName }}</h2>
+                        <hr>
+                        <ul class="nav nav-pills nav-stacked" style="max-width: 300px;">
+                            <li class="active"><a href="#invoice" data-toggle="tab">My Invoice Details</a></li>
+                            <li><a href="#delivery" data-toggle="tab">My Delivery Details</a></li>
+                            <li><a href="#history" data-toggle="tab">Order History</a></li>
+                            <li><a href="#password" data-toggle="tab">Password</a></li>
+                        </ul>
+                        <hr>
+                        <ul class="nav nav-pills nav-stacked" style="max-width: 300px;">
+                            <li><a href="{{ path('security_logout') }}">Logout</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- FEATURED -->
+                    <div class="margin-bottom-60">
+
+                        <h2 class="owl-featured">FEATURED</h2>
+                        <div class="owl-carousel featured" data-plugin-options='{"singleItem": true, "stopOnHover":false, "autoPlay":false, "autoHeight": false, "navigation": true, "pagination": false}'>
+                            {% for featuredProduct in featuredProducts if featuredProduct.display %}
+                                <div><!-- SLIDE 1 -->
+                                    <ul class="list-unstyled nomargin nopadding text-left">
+
+                                        <li class="clearfix"><!-- item -->
+                                            <div class="thumbnail featured clearfix pull-left">
+                                                <a href="{{ path('product_only', {'product': featuredProduct.slug}) }}">
+                                                    <img src="{{ asset('assets/images/' ~ featuredProduct.imageName) | imagine_filter('basket') }}" width="80" height="80" alt="{{ featuredProduct.name }}">
+                                                </a>
+                                            </div>
+
+                                            <a class="block size-12" href="{{ path('product_only', {'product': featuredProduct.slug}) }}">{{ featuredProduct.name }}</a>
+                                            <div class="rating rating-5 size-13 width-100 text-left"><!-- rating-0 ... rating-5 --></div>
+                                            <div class="size-18 text-left">£{{ featuredProduct.price }}</div>
+                                        </li><!-- /item -->
+
+                                    </ul>
+                                </div><!-- /SLIDE 1 -->
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+                    <!-- /FEATURED -->
+
+                </div>
+
+            </div>
+        </section>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('min/index.php?f=assets/backend-client/plugins/jquery-confirm/jquery-confirm.min.js') }}"></script>
+
+    <script src="{{ asset('min/index.php?f=assets/frontend-client/js/custom/BasketAdd.js') }}"></script>
+    <script src="{{ asset('min/index.php?f=assets/frontend-client/js/custom/Details.js') }}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            var $details = $('#details');
+
+            var details = new BasketAdd($details);
+            var delivery = new Details($details);
+        });
+    </script>
+
+{% endblock %}

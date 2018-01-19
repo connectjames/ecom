@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <style type="text/css">
+        body,
+        html,
+        body {background: #fff !important;margin: 0; padding: 0; min-width: 100%!important; color: #000; font-size: 20px; font-family: arial,sans-serif;}
+        h1 {color: #000; font-size: 40px;}
+        h3 {font-size: 20px; color: #000;}
+        button {
+            background-color: #ffce15;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #f5c615;
+        }
+        button {font-size: 30px; background: #ffce15;}
+        hr {}
+        th {background: #000; color: #fff; padding: 10px; border: 1px solid #fff;}
+    </style>
+</head>
+<p>
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+        <td width="600">
+            <a href="{{ absolute_url(path('index')) }}"><img src="{{ absolute_url(asset('assets/images/logo.png')) }}" alt="{{ company_name }} Logo" width="300"></a>
+        </td>
+    </tr>
+</table>
+
+<h1>Welcome to our brand new website!</h1>
+
+<h3>The fastest, most up to date spill kits e-commerce website on the market, check out our exciting new features:-</h3>
+<p>
+</p>
+<ul>
+    <li>Tablet & Mobile Enabled</li>
+    <li>Exciting New Products</li>
+    <li>Easy Checkout</li>
+    <li>Better Navigation</li>
+    <li>Product Demonstration Videos</li>
+</ul>
+<p>
+</p>
+
+<h3><i>Below is a link to setup your password as we do not keep this information.</i></h3>
+<p>
+</p>
+    <center>
+        <a href="{{ absolute_url(path('retrieve_password', {'email': email, 'token': token})) }}"><button class="success">Click here to create your new password!</button></a>
+    </center>
+<p>
+</p>
+
+<center><b>Thank you for choosing {{ company_name }}</b></center>
+</body>
+</html>

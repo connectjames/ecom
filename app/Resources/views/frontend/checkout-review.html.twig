@@ -1,0 +1,304 @@
+{% extends 'base.html.twig' %}
+{% block metaTitle %}Checkout Review{% endblock %}
+{% block metaKeywords %}checkout review{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('assets/frontend-client/plugins/cart/card-js.min.css') }}" rel="stylesheet" type="text/css"
+    />
+{% endblock %}
+{% block basket %}{% endblock %}
+{% block sticky %}{% endblock %}
+{% block body %}
+    <div id="checkout">
+        <section class="page-header page-header-xs">
+            <div class="container">
+
+                <h1>Checkout</h1>
+
+                <!-- breadcrumbs -->
+                <ol class="breadcrumb">
+                    <li><a href="{{ path('index') }}">Home</a></li>
+                    <li><a href="{{ path('checkout_review') }}">Checkout - Review</a></li>
+                </ol><!-- /breadcrumbs -->
+
+            </div>
+        </section>
+        <!-- /PAGE HEADER -->
+
+        <!-- PRELOADER CHECKOUT -->
+        <div id="preloader-checkout" class="display-none">
+            <div class="inner">
+                <span class="loader"></span>
+            </div>
+        </div><!-- /PRELOADER CHECKOUT -->
+
+        <!-- CART -->
+        <section class="cart">
+            <div id="beginning" class="container">
+
+                <ul class="process-steps nav nav-justified">
+                    <li>
+                        <a href="{{ path('basket') }}"><i class="fa fa-shopping-cart"></i></a>
+                        <h5>Basket</h5>
+                    </li>
+                    <li>
+                        <a href="{{ path('checkout_invoice') }}#beginning"><i class="fa fa-file-text-o"></i></a>
+                        <h5>Invoice Details</h5>
+                    </li>
+                    <li>
+                        <a href="{{ path('checkout_delivery') }}#beginning"><i class="fa fa-envelope-o margin-left-minus-six"></i></a>
+                        <h5>Delivery Details</h5>
+                    </li>
+                    <li class="active">
+                        <a href="{{ path('checkout_review') }}#beginning"><i class="icon-ok"></i></a>
+                        <h5>Review & Secure Payment</h5>
+                    </li>
+                </ul>
+
+                <hr>
+                <i style="font-size: 18px;">Please call us on <a href="tel:4854007233" class="size-18"><span>+44 (0) 1924 442 701</span></a> if any error occurs</i>
+                <hr>
+
+                <!-- CHECKOUT -->
+                <div class="col-lg-7 col-sm-7">
+                    <div class="heading-title">
+                        <h4>Review & Secure Payment</h4>
+                    </div>
+
+                    <div class="col-lg-6 col-sm-6 size-18">
+                        <h5>Invoice Details</h5>
+                        <hr>
+                        <span class="block"><strong><i class="fa fa-map-user"></i> Name:</strong><br>
+                            <span class="padding-15 height-30 opacity-7">
+                                {{ invoiceDetails['invoiceAddress']['firstName'] }} {{ invoiceDetails['invoiceAddress']['lastName'] }}
+                            </span>
+                        </span>
+                        <span class="block"><strong><i class="fa fa-map-marker"></i> Address:</strong><br>
+                            <span class="padding-15 height-30 opacity-7">
+                                {{ invoiceDetails['invoiceAddress']['address1'] }}
+                            </span>
+                            <span class="padding-15 height-30 opacity-7">
+                                {{ invoiceDetails['invoiceAddress']['address2'] is defined ? invoiceDetails['invoiceAddress']['address2'] : '' }}
+                            </span>
+                        </span>
+                        <span class="block"><strong><i class="fa fa-map-marker"></i> City:</strong><br>
+                            <span class="padding-15 height-30 opacity-7">
+                                {{ invoiceDetails['invoiceAddress']['city'] }}
+                            </span>
+                        </span>
+                        <span class="block"><strong><i class="fa fa-map-marker"></i> Postcode:</strong><br>
+                            <span class="padding-15 height-30 opacity-7">
+                                {{ invoiceDetails['invoiceAddress']['postcode']|upper }}
+                            </span>
+                        </span>
+                        <span class="block"><strong><i class="fa fa-phone"></i> Phone:</strong><br>
+                            <span class="padding-15 height-30 opacity-7">
+                                {{ invoiceDetails['invoiceAddress']['phone'] }}
+                            </span>
+                        </span>
+                        <span class="block"><strong><i class="fa fa-envelope"></i> Email:</strong><br>
+                            <span class="padding-15 height-30 opacity-7">
+                                {{ invoiceDetails.email }}
+                            </span>
+                        </span>
+                        {% if invoiceDetails.purchaseOrderNumber is defined and invoiceDetails.purchaseOrderNumber %}
+                            <span class="block"><strong> PO Number:</strong><br>
+                                <span class="padding-15 height-30 opacity-7">
+                                    {{ invoiceDetails.purchaseOrderNumber| default("") }}
+                                </span>
+                            </span>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-lg-6 col-sm-6 size-18">
+                        <h5>Delivery Details</h5>
+                        <hr>
+                        <span class="block"><strong><i class="fa fa-map-user"></i> Name:</strong><br>
+                            <span class="padding-15 height-30 opacity-7">
+                                {{ deliveryDetails['deliveryAddress']['firstName'] }} {{ deliveryDetails['deliveryAddress']['lastName'] }}
+                            </span>
+                        </span>
+                        <span class="block"><strong><i class="fa fa-map-marker"></i> Address:</strong><br>
+                            <span class="padding-15 height-30 opacity-7">
+                                {{ deliveryDetails['deliveryAddress']['address1'] }}
+                            </span>
+                            <span class="padding-15 height-30 opacity-7">
+                                {{ deliveryDetails['deliveryAddress']['address2'] is defined ? deliveryDetails['deliveryAddress']['address2'] : '' }}
+                            </span>
+                        </span>
+                        <span class="block"><strong><i class="fa fa-map-marker"></i> City:</strong><br>
+                            <span class="padding-15 height-30 opacity-7">
+                                {{ deliveryDetails['deliveryAddress']['city'] }}
+                            </span>
+                        </span>
+                        <span class="block"><strong><i class="fa fa-map-marker"></i> Postcode:</strong><br>
+                            <span class="padding-15 height-30 opacity-7">
+                                {{ deliveryDetails['deliveryAddress']['postcode']|upper }}
+                            </span>
+                        </span>
+                        <span class="block"><strong><i class="fa fa-phone"></i> Phone:</strong><br>
+                            <span class="padding-15 height-30 opacity-7">
+                                {{ deliveryDetails['deliveryAddress']['phone'] }}
+                            </span>
+                        </span>
+                        {% if deliveryDetails.comment is defined and deliveryDetails.comment %}
+                            <span class="block"><strong> Comments:</strong><br>
+                                <span class="padding-15 height-30 opacity-7">
+                                    {{ deliveryDetails.comment| default("") }}
+                                </span>
+                            </span>
+                        {% endif %}
+                    </div>
+
+                </div>
+
+                <div class="col-lg-5 col-sm-5">
+                    <div class="heading-title">
+                        <h4>Your Basket</h4>
+                    </div>
+
+                    <!-- TOTAL / PLACE ORDER -->
+                    <div class="toggle-transparent toggle-bordered-full clearfix">
+                        <div class="toggle active">
+                            <div class="toggle-content">
+
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>Product Name</th>
+                                            <th>Qty</th>
+                                            <th class="text-right">Total</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for basketProduct in basketDetails["basketProducts"] %}
+                                            <tr>
+                                                <td>{{ basketProduct['name'] }}</td>
+                                                <td>{{ basketProduct['quantity'] }}</td>
+                                                <td class="text-right">£{{ basketProduct['price']|number_format(2, '.', ',') }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <span class="clearfix">
+                                                <span class="pull-right">£{{ basketDetails["basketTotal"]|number_format(2, '.', ',') }}</span>
+                                                <strong class="pull-left">Subtotal:</strong>
+                                            </span>
+                                <br>
+                                <span class="clearfix">
+                                                <span class="pull-right">£{{ (basketDetails["basketTotal"] * 1.2 - basketDetails["basketTotal"])|number_format(2, '.', ',') }}</span>
+                                                <span class="pull-left">VAT:</span>
+                                            </span>
+
+                                <hr />
+
+                                {% if basketDetails["deliveryAmount"] %}
+                                    <span class="clearfix">
+                                                <span class="pull-right">£{{ basketDetails["deliveryAmount"]|number_format(2, '.', ',') }}</span>
+                                                <strong class="pull-left">Delivery Subtotal:</strong>
+                                            </span>
+                                    <br>
+                                    <span class="clearfix">
+                                                    <span class="pull-right">£{{ (basketDetails["deliveryAmount"] * 1.2 - basketDetails["deliveryAmount"])|number_format(2, '.', ',') }}</span>
+                                                    <span class="pull-left">Delivery VAT:</span>
+                                                </span>
+
+                                    <hr />
+                                {% endif %}
+
+                                <span class="clearfix">
+                                    <span class="pull-right size-20">£{{ ((basketDetails["deliveryAmount"] + basketDetails["basketTotal"]) * 1.2)|number_format(2, '.', ',') }}</span>
+                                    <strong class="pull-left">TOTAL:</strong>
+                                </span>
+
+                            </div>
+
+                            <hr>
+
+                            <button type="submit" data-toggle="modal" data-target="#sagepay" class="btn btn-primary btn-lg btn-block size-15"><i class="fa fa-mail-forward"></i> PAY & PLACE ORDER</button>
+
+                            <hr>
+
+                            <a href="{{ path('checkout_order_without_payment') }}" class="btn btn-primary btn-lg btn-block size-15"><i class="fa fa-mail-forward"></i> PLACE ORDER & CONTACT ME FOR PAYMENT</a>
+                        </div>
+                    </div>
+                    <!-- /TOTAL / PLACE ORDER -->
+
+                </div>
+                <!-- /CHECKOUT -->
+
+                <div id="sagepay" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">SagePay Secure Payment</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form method="post">
+                                    <div class="col-lg-12 col-sm-12">
+                                        <div class="card-js"
+                                             data-capture-name="true"
+                                             data-icon-colour="#FAB702">
+                                            <input class="card-number" title="card-number" id="card-number" name="card-number" placeholder="Card number" required>
+                                            <input class="name" title="name" id="name" name="name" placeholder="Name on card" required>
+                                            <input type="text" class="expiry-month" title="expiry-month" id="expiry-month" name="expiry-month" minlength="2" required>
+                                            <input type="text" class="expiry-year" title="expiry-year" id="expiry-year" name="expiry-year" minlength="2" required>
+                                            <input class="cvc" title="cvc" id="cvc" name="cvc" required>
+                                        </div>
+
+                                        <hr>
+
+                                        <button type="submit" data-url-merchant="{{ path('generate_merchant_session') }}" data-url-place-order="{{ path('checkout_order') }}" class="js-submit btn btn-primary btn-lg btn-block size-15"><span class="fa fa-mail-forward"></span>PLACE ORDER</button>
+                                        <div class="cc-loading text-center size-25 margin-top-2"></div>
+                                        <br>
+                                        <div class="size-15">
+                                            <p>We take your online security very seriously
+                                                Your card payment is undertaken via SagePay and/or PayPal and is not in any way connected to our site,
+                                                so we will never see your card details.</p>
+                                            <p>
+                                                <img src="{{ asset("assets/frontend-client/images/sage-pay.jpg") }}" title="Secure with SAGE PAY" class="align-center">
+                                                <img src="{{ asset("assets/frontend-client/images/sage-pay-2.jpg") }}" title="Secure with SAGE PAY" class="align-center">
+                                            </p>
+                                            <p>You can pay through SagePay with all main card providers.
+                                                <br>
+                                                SagePay is a trusted market leaders in secure e-commerce payment gateways.</p>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        <!-- /CART -->
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('https://pi-live.sagepay.com/api/v1/js/sagepay.js') }}"></script>
+    {{ parent() }}
+
+    <script src="{{ asset('min/index.php?f=assets/frontend-client/plugins/cart/card-js.min.js') }}"></script>
+    <script src="{{ asset('min/index.php?f=assets/frontend-client/js/custom/Checkout.js') }}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            var $checkout = $('#checkout');
+
+            var checkout = new Checkout($checkout);
+        });
+    </script>
+
+{% endblock %}

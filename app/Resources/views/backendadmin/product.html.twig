@@ -1,0 +1,266 @@
+{% extends 'baseAdmin.html.twig' %}
+{% block metaTitle %}Products {% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('assets/backend-client/css/layout-datatables.css') }}" rel="stylesheet" type="text/css"
+          />
+{% endblock %}
+{% block menu_catalogue_active %}class="active"{% endblock %}
+{% block menu_products_active %}class="active"{% endblock %}
+{% block body %}
+    <!-- page title -->
+    <header id="page-header">
+        <h1>Products</h1>
+        <ol class="breadcrumb">
+            <li class="active">Products</li>
+        </ol>
+    </header>
+    <!-- /page title -->
+    <div id="content" class="padding-20">
+        <!--
+                                PANEL CLASSES:
+                                    panel-default
+                                    panel-danger
+                                    panel-warning
+                                    panel-info
+                                    panel-success
+
+                                INFO: 	panel collapse - stored on user localStorage (handled by app.js _panels() function).
+                                        All pannels should have an unique ID or the panel collapse status will not be stored!
+                            -->
+        <div id="product" class="panel panel-default" data-url="{{ path('products') }}">
+            <div class="panel-heading">
+                 <span class="title elipsis">
+                     <strong class="center-text">All Products</strong> <!-- panel title -->
+                 </span>
+            </div>
+
+            <!-- panel content -->
+            <div class="panel-body">
+                <div class="alert alert-info margin-bottom-30 action-table">
+                    <div class="pull-left col-md-3col-sm-6">
+                        <form action="#" method="get">
+                            <div class="dataTables_length" id="js-displays" data-url="{{ path('products') }}">
+                                <label>
+                                    <div class="pull-left">Change Display to </div>
+                                    <select id="display" name="display" class="form-control input-xsmall input-inline">
+                                        <option value="0" selected>Select</option>
+                                        <option value="1">No</option>
+                                        <option value="2">Yes</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="pull-right">
+                        <a href="{{ path('products_new') }}" title="Create new product">
+                            <button id="add-product" type="button" class="btn btn-success">Add Product</button>
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <form action="{{ path('products') }}" method="get">
+                            <div class="dataTables_length" id="datatable_sample_length">
+                                <label>
+                                    <select id="records" name="records" class="form-control input-xsmall input-inline" onchange="changeRecords()">
+                                        <optgroup label="Selected">
+                                            <option value="{{ page }}" selected>{{ page }}</option>
+                                        </optgroup>
+                                        <optgroup label="Options">
+                                            <option value="15">15</option>
+                                            <option value="30">30</option>
+                                            <option value="50">50</option>
+                                            <option value="100">100</option>
+                                            <option value="200">200</option>
+                                        </optgroup>
+                                    </select> records per page</label></div>
+                        </form>
+                    </div>
+                    <div id="js-search-client" class="col-md-6 col-sm-12 pull-right">
+                        <div class="dataTables_custom pull-right">
+                            {{ knp_pagination_filter(products, {'prod.name': 'Sort by Product Name'}) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="table-scrollable">
+                    <table class="table table-striped table-bordered table-hover table-responsive">
+                        <thead>
+                        <tr>
+                            <th class="js-table-checkbox">
+                                <input type="checkbox">
+                            </th>
+                            <th class="col-sm-1">
+                                {{ knp_pagination_sortable(products, 'ID', 'prod.id') }}
+                                {% if products.isSorted('prod.id') %}
+                                    {% if (app.request.query.get('direction') != 'desc') %}
+                                        <i class="fa fa-caret-up" aria-hidden="true"></i>
+                                    {% else %}
+                                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                                    {% endif %}
+                                {% endif %}
+                            </th>
+                            <th class="col-sm-2">
+                                Thumbnail
+                            </th>
+                            <th class="col-sm-3">
+                                {{ knp_pagination_sortable(products, 'Name', 'prod.name') }}
+                                {% if products.isSorted('prod.name') %}
+                                    {% if (app.request.query.get('direction') != 'desc') %}
+                                        <i class="fa fa-caret-up" aria-hidden="true"></i>
+                                    {% else %}
+                                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                                    {% endif %}
+                                {% endif %}
+                            </th>
+                            <th class="col-sm-1">
+                                {{ knp_pagination_sortable(products, 'SKU', 'prod.sku') }}
+                                {% if products.isSorted('prod.sku') %}
+                                    {% if (app.request.query.get('direction') != 'desc') %}
+                                        <i class="fa fa-caret-up" aria-hidden="true"></i>
+                                    {% else %}
+                                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                                    {% endif %}
+                                {% endif %}
+                            </th>
+                            <th class="col-sm-1">
+                                {{ knp_pagination_sortable(products, 'Price (£)', 'prod.price') }}
+                                {% if products.isSorted('prod.price') %}
+                                    {% if (app.request.query.get('direction') != 'desc') %}
+                                        <i class="fa fa-caret-up" aria-hidden="true"></i>
+                                    {% else %}
+                                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                                    {% endif %}
+                                {% endif %}
+                            </th>
+                            <th class="col-sm-1">
+                                {{ knp_pagination_sortable(products, 'Display', 'prod.display') }}
+                                {% if products.isSorted('prod.display') %}
+                                    {% if (app.request.query.get('direction') != 'desc') %}
+                                        <i class="fa fa-caret-up" aria-hidden="true"></i>
+                                    {% else %}
+                                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                                    {% endif %}
+                                {% endif %}
+                            </th>
+                            <th class="col-sm-1">
+                                {{ knp_pagination_sortable(products, 'Featured', 'prod.featured') }}
+                                {% if products.isSorted('prod.featured') %}
+                                    {% if (app.request.query.get('direction') != 'desc') %}
+                                        <i class="fa fa-caret-up" aria-hidden="true"></i>
+                                    {% else %}
+                                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                                    {% endif %}
+                                {% endif %}
+                            </th>
+                            <th class="col-sm-1">Action</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for product in products %}
+                            <tr id="js-product-{{ product.id }}" class="odd gradeX">
+                                <td>
+                                    <input type="checkbox" name="products" value={{ product.id }}>
+                                </td>
+                                <td>{{ product.id }}</td>
+                                <td>
+                                    <img src="{{ asset('assets/images/' ~ product.imageName) | imagine_filter('thumbnail') }}" height="45" width="45">
+                                </td>
+                                <td>{{ product.name }}</td>
+                                <td>{{ product.sku }}</td>
+                                <td class="js-price">
+                                    <div class="pull-left width-100 input-price">
+                                        <input class="width-70 js-input" type="number" name="price" min="0" step="0.01" value="{{ product.price }}">
+                                        <a href="#"><i class="fa fa-check" aria-hidden="true"
+                                                       data-url="{{ path('products_change_price', {'id': product.id}) }}"
+                                            ></i></a>
+                                    </div>
+                                </td>
+                                <td class="js-display" data-id="{{ product.id }}">
+                                    <label class="switch switch-info switch-round">
+                                        <input type="checkbox"
+                                               {% if product.display == 1 %}checked=""{% endif %}
+                                               data-url="{{ path('products_change_display_or_featured_product', {'id': product.id, 'display': product.display + 1}) }}"
+                                        >
+                                        <span class="switch-label" data-on="YES" data-off="NO"></span>
+                                    </label>
+                                </td>
+                                <td class="js-featured" data-id="{{ product.id }}">
+                                    <label class="switch switch-info switch-round">
+                                        <input type="checkbox"
+                                               {% if product.featured == 1 %}checked=""{% endif %}
+                                               data-url="{{ path('products_change_display_or_featured_product', {'id': product.id, 'featured': product.featured + 1}) }}"
+                                        >
+                                        <span class="switch-label" data-on="YES" data-off="NO"></span>
+                                    </label>
+                                </td>
+                                <td><a title="Link to the product {{ product.name }}" href="{{ path('products_view', {'id': product.id }) }}">View/Edit</a> </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pull-left">
+                    Total Products: {{ products.getTotalItemCount }}
+                </div>
+                <div class="navigation pull-right">
+                    {{ knp_pagination_render(products) }}
+                </div>
+
+            </div>
+            <!-- /panel content -->
+
+        </div>
+        <!-- /PANEL -->
+    </div>
+
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="text/javascript" src="{{ asset('min/index.php?f=assets/backend-client/plugins/jquery/jquery-ui.min.js') }}"></script>
+
+    <script src="{{ asset('min/index.php?f=assets/backend-client/js/custom/Product.js') }}"></script>
+
+    <script>
+
+        $(document).ready(function() {
+            var $table = $('#product');
+
+            var product = new Product($table);
+        });
+
+        function changeRecords() {
+
+            var e = document.getElementById('records');
+
+            var strUser = e.options[e.selectedIndex].value;
+
+            var url = 'products';
+
+            {% if app.request.query.all() %}
+
+            {% for parameter,value in app.request.query.all() %}
+
+            {% if (parameter == 'search') %}
+
+            url = '/admin/products' + '?' + '{{ parameter }}' + '=' + '{{ value }}';
+            {% elseif (parameter == 'searchValue') %}
+
+            url = url + '&' + '{{ parameter }}' + '=' + '{{ value }}';
+            {% endif %}
+            {% endfor %}
+
+            url = url + '&' + 'records' + '=' + strUser;
+
+            window.location.href = url;
+            {% endif %}
+
+            url = url + '?' + 'records' + '=' + strUser;
+
+            window.location.href = url;
+        }
+
+    </script>
+{% endblock %}

@@ -1,0 +1,37 @@
+<style type="text/css">
+    body,
+    html,
+    .body {
+        background: #f3f3f3 !important;
+    }
+    .container.header {
+        background: transparent !important;
+    }
+    .body-drip {
+        border-top: 8px solid #663399;
+    }
+</style>
+
+<container class="body-drip">
+
+    <row>
+        <columns>
+            <h4 class="text-center">New Message from {{ contactFormData.fullName }} - Contact Form {{ company_name }}</h4>
+        </columns>
+    </row>
+
+    <hr/>
+
+    <row>
+        <columns>
+            <p class="text-center">Details:</p>
+            <ul>
+                <li>Full Name: {{ contactFormData.fullName }}</li>
+                <li>Email: {{ contactFormData.email }}</li>
+                <li>Phone: {{ contactFormData.phone }}</li>
+                <li>Message: {{ contactFormData.message }}</li>
+            </ul>
+        </columns>
+    </row>
+
+</container>

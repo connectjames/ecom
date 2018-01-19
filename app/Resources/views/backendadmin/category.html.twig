@@ -1,0 +1,326 @@
+{% extends 'baseAdmin.html.twig' %}
+{% block metaTitle %}Categories {% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('assets/backend-client/css/layout-nestable.css') }}" rel="stylesheet" type="text/css"
+          />
+{% endblock %}
+{% block menu_catalogue_active %}class="active"{% endblock %}
+{% block menu_categories_active %}class="active"{% endblock %}
+{% block body %}
+
+    <!-- page title -->
+    <header id="page-header">
+        <h1>Categories</h1>
+        <ol class="breadcrumb">
+            <li class="active">Categories</li>
+        </ol>
+    </header>
+    <!-- /page title -->
+
+
+    <div id="content" class="padding-20">
+
+        <!-- jQuery Nestable -->
+        <div id="ui-nestable" class="panel panel-default panel-widget">
+
+            <div class="panel-heading">
+
+							<span class="elipsis"><!-- panel title -->
+								<strong>All Categories</strong>
+							</span>
+
+            </div>
+
+            <div class="panel-body">
+                <div id="top-bar-action" class="alert alert-info margin-bottom-30 action-table">
+                    <div class="margin-bottom-20 pull-left">
+                        <button type="button" class="btn btn-default" data-action="expand-all">Expand All</button>
+                        <button type="button" class="btn btn-default" data-action="collapse-all">Collapse All</button>
+                    </div>
+                    <div class="pull-right">
+                        <a href="{{ path('categories_new') }}" title="Create new product">
+                            <button id="add-category" type="button" class="btn btn-success">Add Category</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div id="category">
+                <div class="col-md-12 top-space">
+
+                    <!-- -- -->
+                    <div id="main-details" class="panel panel-default">
+
+                        <div class="panel-heading">
+
+                            <span class="elipsis"><!-- panel title -->
+                                <strong>MAIN MENU CATEGORIES</strong>
+                            </span>
+
+                            <!-- right options -->
+                            <ul class="options pull-right list-inline">
+                                <li><a href="#" class="opt panel_colapse" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Colapse"></a></li>
+                                <li><a href="#" class="opt panel_fullscreen hidden-xs" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand"></i></a></li>
+                            </ul>
+                            <!-- /right options -->
+
+                        </div>
+
+                        <!-- panel content -->
+                        <div class="panel-body">
+
+                            <div class="row">
+
+                                <div id="nestable" class="col-sm-12 col-md-12">
+
+                                    {# To output json result uncomment line below #}
+                                    <textarea id="nestable_output" class="form-control margin-bottom10 display-none"></textarea>
+
+                                    <div class="dd" id="nestable-categories">
+
+                                        {% if categoriesMenu is empty %}
+                                            <li class="dd-empty"></li>
+                                        {% endif %}
+
+                                        <ol class="dd-list">
+
+                                            {% for categoryMenu in categoriesMenu %}
+                                                {% if categoryMenu|length > 1 and categoryMenu["children"] is iterable %}
+
+                                                    <li class="dd-item dd3-item" data-url="{{ categoryMenu["url"] }}">
+                                                        <div class="dd-handle dd3-handle"></div>
+                                                        {% for category in categories %}
+                                                            {% if category.slug == categoryMenu["url"] %}
+                                                                <div class="dd3-content">
+                                                                    <a href="{{ path('categories_view', {'id': category.id }) }}" title="View {{ category.name }}" target="_blank">{{ category.name|upper }} <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                                                                    <div class="js-display pull-right" data-id="{{ category.id }}" data-url="{{ path('categories_change_display') }}">
+                                                                        <label id="js-category-{{ category.id }}" class="switch switch-info switch-round">
+                                                                            <strong class="size-16">Display:</strong>
+                                                                            <input type="checkbox"
+                                                                                   {% if category.display == 1 %}checked=""{% endif %}
+                                                                                   data-url="{{ path('categories_change_display', {'id': category.id, 'display': category.display + 1}) }}"
+                                                                            >
+                                                                            <span class="switch-label" data-on="YES" data-off="NO"></span>
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                        <ol class="dd-list">
+                                                            {% for itemInChildren in categoryMenu["children"] %}
+                                                                {% if itemInChildren|length > 1 and itemInChildren["children"] is iterable %}
+
+                                                                        <li class="dd-item dd3-item" data-url="{{ itemInChildren["url"] }}">
+                                                                            <div class="dd-handle dd3-handle"></div>
+                                                                            {% for category in categories %}
+                                                                                {% if category.slug == itemInChildren["url"] %}
+                                                                                    <div class="dd3-content">
+                                                                                        <a href="{{ path('categories_view', {'id': category.id }) }}" title="View {{ category.name }}" target="_blank">{{ category.name|upper }} <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                                                                                        <div class="js-display pull-right" data-id="{{ category.id }}" data-url="{{ path('categories_change_display') }}">
+                                                                                            <label id="js-category-{{ category.id }}" class="switch switch-info switch-round">
+                                                                                                <strong class="size-16">Display:</strong>
+                                                                                                <input type="checkbox"
+                                                                                                       {% if category.display == 1 %}checked=""{% endif %}
+                                                                                                       data-url="{{ path('categories_change_display', {'id': category.id, 'display': category.display + 1}) }}"
+                                                                                                >                                                                                                <span class="switch-label" data-on="YES" data-off="NO"></span>
+                                                                                            </label>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                {% endif %}
+                                                                            {% endfor %}
+                                                                            <ol class="dd-list">
+                                                                                {% for itemInChildren in itemInChildren["children"] %}
+                                                                                    {% if itemInChildren|length > 1 and itemInChildren["children"] is iterable %}
+
+                                                                                    {% else %}
+
+                                                                                        <li class="dd-item dd3-item" data-url="{{ itemInChildren["url"] }}">
+                                                                                            <div class="dd-handle dd3-handle"></div>
+                                                                                            {% for category in categories %}
+                                                                                                {% if category.slug == itemInChildren["url"] %}
+                                                                                                    <div class="dd3-content">
+                                                                                                        <a href="{{ path('categories_view', {'id': category.id }) }}" title="View {{ category.name }}" target="_blank">{{ category.name|upper }} <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                                                                                                        <div class="js-display pull-right" data-id="{{ category.id }}" data-url="{{ path('categories_change_display') }}">
+                                                                                                            <label id="js-category-{{ category.id }}" class="switch switch-info switch-round">
+                                                                                                                <strong class="size-16">Display:</strong>
+                                                                                                                <input type="checkbox"
+                                                                                                                       {% if category.display == 1 %}checked=""{% endif %}
+                                                                                                                       data-url="{{ path('categories_change_display', {'id': category.id, 'display': category.display + 1}) }}"
+                                                                                                                >                                                                                                                <span class="switch-label" data-on="YES" data-off="NO"></span>
+                                                                                                            </label>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                {% endif %}
+                                                                                            {% endfor %}
+                                                                                        </li>
+
+                                                                                    {% endif %}
+                                                                                {% endfor %}
+                                                                            </ol>
+                                                                        </li>
+
+                                                                {% else %}
+
+                                                                    <li class="dd-item dd3-item" data-url="{{ itemInChildren["url"] }}">
+                                                                        <div class="dd-handle dd3-handle"></div>
+                                                                        {% for category in categories %}
+                                                                            {% if category.slug == itemInChildren["url"] %}
+                                                                                <div class="dd3-content">
+                                                                                    <a href="{{ path('categories_view', {'id': category.id }) }}" title="View {{ category.name }}" target="_blank">{{ category.name|upper }} <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                                                                                    <div class="js-display pull-right" data-id="{{ category.id }}" data-url="{{ path('categories_change_display') }}">
+                                                                                        <label id="js-category-{{ category.id }}" class="switch switch-info switch-round">
+                                                                                            <strong class="size-16">Display:</strong>
+                                                                                            <input type="checkbox"
+                                                                                                   {% if category.display == 1 %}checked=""{% endif %}
+                                                                                                   data-url="{{ path('categories_change_display', {'id': category.id, 'display': category.display + 1}) }}"
+                                                                                            >                                                                                            <span class="switch-label" data-on="YES" data-off="NO"></span>
+                                                                                        </label>
+                                                                                    </div>
+                                                                                </div>
+                                                                            {% endif %}
+                                                                        {% endfor %}
+                                                                    </li>
+
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        </ol>
+                                                    </li>
+
+                                                {% else %}
+
+                                                    <li class="dd-item dd3-item" data-url="{{ categoryMenu["url"] }}">
+                                                        <div class="dd-handle dd3-handle"></div>
+                                                        {% for category in categories %}
+                                                            {% if category.slug == categoryMenu["url"] %}
+                                                                <div class="dd3-content">
+                                                                    <a href="{{ path('categories_view', {'id': category.id }) }}" title="View {{ category.name }}" target="_blank">{{ category.name|upper }} <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                                                                    <div class="js-display pull-right" data-id="{{ category.id }}" data-url="{{ path('categories_change_display') }}">
+                                                                        <label id="js-category-{{ category.id }}" class="switch switch-info switch-round">
+                                                                            <strong class="size-16">Display:</strong>
+                                                                            <input type="checkbox"
+                                                                                   {% if category.display == 1 %}checked=""{% endif %}
+                                                                                   data-url="{{ path('categories_change_display', {'id': category.id, 'display': category.display + 1}) }}"
+                                                                            >                                                                            <span class="switch-label" data-on="YES" data-off="NO"></span>
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </li>
+
+                                                {% endif %}
+                                            {% endfor %}
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div class="text-right">
+                                <button id="save-categories" data-url="{{ path('categories') }}" type="button" class="btn btn-success">Save Menu Ordering</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /jQuery Nestable -->
+
+    </div>
+
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('min/index.php?f=assets/backend-client/plugins/nestable/jquery.nestable.js') }}"></script>
+
+    <script src="{{ asset('min/index.php?f=assets/backend-client/js/custom/CategoryB.js') }}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            var $category = $('#category');
+
+            var category = new CategoryB($category);
+        });
+
+//        function nestable() {
+//
+//            var $nestable = jQuery('#nestable');
+//
+//            if(jQuery().nestable) {
+//
+//                var updateOutput = function (e) {
+//                    var list = e.length ? e : $(e.target),
+//                            output = list.data('output');
+//                    if (window.JSON) {
+//                        output.val(window.JSON.stringify(list.nestable('serialize'))); //, null, 2));
+//                    } else {
+//                        output.val('JSON browser support required for this demo.');
+//                    }
+//                };
+//
+//                // Nestable list 1
+//                $nestable.find('#nestable-categories').nestable({
+//                    group: 1,
+//                    maxDepth: 3
+//                }).on('change', updateOutput);
+//
+//                // output initial serialised data
+//                updateOutput($nestable.find('#nestable-categories').data('output', $nestable.find('#nestable_output')));
+//
+//                // Expand All
+//                jQuery('button[data-action=expand-all]').bind('click', function() {
+//                    jQuery('.dd').nestable('expandAll');
+//                });
+//
+//                // Collapse All
+//                jQuery('button[data-action=collapse-all]').bind('click', function() {
+//                    jQuery('.dd').nestable('collapseAll');
+//                });
+//
+//            }
+//        }
+
+//        nestable();
+
+//        $('#category').on('click', '#save-categories', function(){
+//            var $nestable = jQuery('#nestable');
+//
+//            var updateOutput = function (e) {
+//                var list = e.length ? e : $(e.target),
+//                        output = list.data('output');
+//                if (window.JSON) {
+//                    output.val(window.JSON.stringify(list.nestable('serialize'))); //, null, 2));
+//                } else {
+//                    output.val('JSON browser support required for this demo.');
+//                }
+//            };
+//
+//            // Nestable list 1
+//            $nestable.find('#nestable-categories').nestable({
+//                group: 1,
+//                maxDepth: 3
+//            }).on('change', updateOutput);
+//
+//            // output initial serialised data
+//            updateOutput($nestable.find('#nestable-categories').data('output', $nestable.find('#nestable_output')));
+//
+//            var urlMenu = '/admin/categories?categoriesMenu=' + $('#nestable_output').val();
+//
+//            $.ajax({
+//                url: urlMenu,
+//                method: 'GET',
+//                dataType: 'html'
+//            }).done(function(data) {
+//                var result = $('<div />').append(data).find('#js-reload').html();
+//                $('#js-reload').html(result);
+//                _toastr('Menu updated','top-full-width','success',false);
+//                nestable();
+//            });
+//        });
+    </script>
+
+{% endblock %}

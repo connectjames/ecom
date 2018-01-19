@@ -1,0 +1,327 @@
+{% extends 'baseAdmin.html.twig' %}
+{% block metaTitle %}Order view {% endblock %}
+{% block menu_orders_active %}class="active"{% endblock %}
+{% block body %}
+<!-- page title -->
+<header id="page-header">
+    <h1>Orders</h1>
+    <ol class="breadcrumb">
+        <li><a href="{{ path('orders') }}">Orders</a></li>
+        <li class="active">View Order</li>
+    </ol>
+</header>
+<!-- /page title -->
+<div id="content" class="padding-20">
+    <!--
+                            PANEL CLASSES:
+                                panel-default
+                                panel-danger
+                                panel-warning
+                                panel-info
+                                panel-success
+
+                            INFO: 	panel collapse - stored on user localStorage (handled by app.js _panels() function).
+                                    All panels should have an unique ID or the panel collapse status will not be stored!
+                        -->
+    <div id="order" class="panel panel-default" data-id="{{ order.id }}">
+        <div class="panel-heading">
+            <div class="pull-left"><a href="{{ path('orders') }}" title="Back to Orders"><i class="fa fa-chevron-left" aria-hidden="true"></i> Back</a></div>
+            <strong class="center-text">{% if previousOrder %}<a href="/admin/orders/view/{{ previousOrder }}" title="Previous Order"><i class="fa fa-chevron-left" aria-hidden="true"></i> previous |</a> {% endif %}Order {{ order.id }} - {{ order.fullName }}{% if nextOrder %} <a href="/admin/orders/view/{{ nextOrder }}" title="Next Order">| next <i class="fa fa-chevron-right" aria-hidden="true"></i></a>{% endif %}</strong>
+        </div>
+
+        <!-- panel content -->
+        <div class="panel-body">
+            <div class="alert alert-info margin-bottom-30 action-table">
+                <div class="js-status pull-left">
+                    Status:
+                    <label class="switch switch-info switch-round">
+                        <input type="checkbox"
+                               {% if order.status.id < 2 %}checked=""{% endif %}
+                               data-url="{{ path('orders_change_status', {'id': order.id}) }}"
+                        >
+                        <span class="switch-label" data-on="YES" data-off="NO"></span>
+                    </label>
+                     ({{ order.status.name }})
+                </div>
+                <div class="pull-right">
+                    <button id="js-invoice" data-url="{{ path('orders_resend_email', {'id': order.id}) }}" type="button" class="btn btn-success">Resend Invoice</button>
+                </div>
+            </div>
+        </div>
+        <!-- /panel content -->
+
+        <div class="col-md-12 top-space">
+
+            <!-- -- -->
+            <div id="order-details" class="panel panel-default">
+
+                <div class="panel-heading">
+
+					<span class="elipsis">
+					    <strong>Order Details</strong>
+					</span>
+
+                    <!-- right options -->
+                    <ul class="options pull-right list-inline">
+                        <li><a href="#" class="opt panel_colapse" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Colapse"></a></li>
+                        <li><a href="#" class="opt panel_fullscreen hidden-xs" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand"></i></a></li>
+                    </ul>
+                    <!-- /right options -->
+
+                </div>
+
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-condensed nomargin">
+                            <thead>
+                            <tr>
+                                <th width="10%">ID</th>
+                                <th width="60%">Item Name</th>
+                                <th width="10%">Quantity</th>
+                                <th width="10%">Unit Price</th>
+                                <th width="10%">Total Price</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in order.orderDescription %}
+                                <tr>
+                                    <td>{{ item["id"] }}</td>
+                                    <td>{{ item["name"] }}</td>
+                                    <td>{{ item["quantity"] }}</td>
+                                    <td>£ {{ item["price"]|number_format(2, '.', ',') }}</td>
+                                    <td class="text-right">£ {{ item["total"]|number_format(2, '.', ',') }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <hr class="nomargin-top">
+
+                    <div class="row">
+
+                        <div class="col-sm-6 pull-right text-right">
+
+                            <ul class="list-unstyled">
+                                <li><strong>Subtotal:</strong> £ {{ order.orderAmount|number_format(2, '.', ',') }}</li>
+                                <li>VAT: £ {{ (order.orderAmount * 1.2 - order.orderAmount)|number_format(2, '.', ',') }}</li>
+                                </ul>
+                            <ul class="list-unstyled">
+                                <li><strong>Subtotal Delivery:</strong> £ {{ order.deliveryAmount|number_format(2, '.', ',') }}</li>
+                                <li>VAT: £ {{ (order.deliveryAmount * 1.2 - order.deliveryAmount)|number_format(2, '.', ',') }}</li>
+                                </ul>
+                            <ul class="list-unstyled">
+                                <li><strong>TOTAL:</strong> £ {{ (order.orderAmount * 1.2 + order.deliveryAmount * 1.2)|number_format(2, '.', ',') }}</li>
+                            </ul>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- / -->
+
+        </div>
+
+        <div class="col-md-6">
+
+            <!-- -- -->
+            <div id="invoice-details" class="panel panel-default">
+
+                <div class="panel-heading">
+
+                    <span class="elipsis"><!-- panel title -->
+                        <strong>Invoice Details</strong>
+                    </span>
+
+                    <!-- right options -->
+                    <ul class="options pull-right list-inline">
+                        <li><a href="#" class="opt panel_colapse" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Colapse"></a></li>
+                        <li><a href="#" class="opt panel_fullscreen hidden-xs" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand"></i></a></li>
+                    </ul>
+                    <!-- /right options -->
+
+                </div>
+
+                <div class="panel-body">
+                    <form name="invoice-form" method="post" id="invoice-form">
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label for="firstName-i" class="control-label required">Firstname*</label><input type="text" name="firstName-i" id="firstName-i" required="required" class="form-control" value="{{ order.invoiceAddress["firstName"] }}">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label for="lastName-i" class="control-label required">Lastname*</label><input type="text" name="lastName-i" id="lastName-i" required="required" class="form-control" value="{{ order.invoiceAddress["lastName"] }}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label for="email" class="control-label required">Email*</label><input type="email" name="email" id="email" required="required" class="form-control" value="{{ order.email }}">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label for="company-i" class="control-label">Company</label><input type="text" name="company-i" id="company-i" class="form-control" value="{{ order.invoiceAddress["company"] }}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label for="address1-i" class="control-label required">First line of address*</label><input type="text" name="address1-i" id="address1-i" required="required" class="form-control" value="{{ order.invoiceAddress["address1"] }}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="address2-i" class="control-label">Second line of address</label><input type="text" name="address2-i" id="address2-i" class="form-control" value="{{ order.invoiceAddress["address2"] }}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label for="city-i" class="control-label required">City*</label><input type="text" name="city-i" id="city-i" required="required" class="form-control" value="{{ order.invoiceAddress["city"] }}">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label for="postcode-i" class="control-label required">Postcode*</label><input type="text" name="postcode-i" id="postcode-i" maxlength="8" required="required" class="form-control uppercase" value="{{ order.invoiceAddress["postcode"] }}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="form-group">
+                                    <label for="phone-i" class="control-label required">Phone*</label><input type="number" name="phone-i" id="phone-i" required="required" class="form-control" value="{{ order.invoiceAddress["phone"] }}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="text-right">
+                            <button id="js-invoice-details" data-url="{{ path('orders_edit', {'id': order.id}) }}" type="button" class="btn btn-default">Save Changes</button>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+            <!-- / -->
+
+        </div>
+
+        <div class="col-md-6">
+
+            <!-- -- -->
+            <div id="delivery-details" class="panel panel-default">
+
+                <div class="panel-heading">
+
+                    <span class="elipsis"><!-- panel title -->
+                        <strong>Delivery Details</strong>
+                    </span>
+
+                    <!-- right options -->
+                    <ul class="options pull-right list-inline">
+                        <li><a href="#" class="opt panel_colapse" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Colapse"></a></li>
+                        <li><a href="#" class="opt panel_fullscreen hidden-xs" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand"></i></a></li>
+                    </ul>
+                    <!-- /right options -->
+
+                </div>
+
+                <div class="panel-body">
+                    <form name="delivery-form" method="post" id="delivery-form">
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label for="firstName-d-1" class="control-label required">Firstname*</label><input type="text" name="firstName-d-1" id="firstName-d-1" required="required" class="form-control" value="{{ order.deliveryAddress["firstName"] }}">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label for="lastName-d-1" class="control-label required">Lastname*</label><input type="text" name="lastName-d-1" id="lastName-d-1" required="required" class="form-control" value="{{ order.deliveryAddress["lastName"] }}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="form-group">
+                                    <label for="company-d-1" class="control-label">Company</label><input type="text" name="company-d-1" id="company-d-1" class="form-control" value="{{ order.deliveryAddress["company"] }}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label for="address1-d-1" class="control-label required">First line of address*</label><input type="text" name="address1-d-1" id="address1-d-1" required="required" class="form-control" value="{{ order.deliveryAddress["address1"] }}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="address2-d-1" class="control-label">Second line of address</label><input type="text" name="address2-d-1" id="address2-d-1" class="form-control" value="{{ order.deliveryAddress["address2"] }}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label for="city-d-1" class="control-label required">City*</label><input type="text" name="city-d-1" id="city-d-1" required="required" class="form-control" value="{{ order.deliveryAddress["city"] }}">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label for="postcode-d-1" class="control-label required">Postcode*</label><input type="text" name="postcode-d-1" id="postcode-d-1" maxlength="8" required="required" class="form-control uppercase" value="{{ order.deliveryAddress["postcode"] }}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="form-group">
+                                    <label for="phone-d-1" class="control-label required">Phone*</label><input type="number" name="phone-d-1" id="phone-d-1" required="required" class="form-control" value="{{ order.deliveryAddress["phone"] }}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="text-right">
+                            <button data-id="0" data-url="{{ path('orders_edit', {'id': order.id}) }}" type="button" class="js-delivery-details btn btn-default">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            <!-- / -->
+
+        </div>
+
+    </div>
+    <!-- /PANEL -->
+</div>
+
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+
+    <script src="{{ asset('min/index.php?f=assets/backend-client/js/custom/ClientOrdView.js') }}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var $order = $('#order');
+
+            var clientOrdView = new ClientOrdView($order);
+        });
+    </script>
+{% endblock %}

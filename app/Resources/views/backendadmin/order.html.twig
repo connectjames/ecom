@@ -1,0 +1,225 @@
+{% extends 'baseAdmin.html.twig' %}
+{% block metaTitle %}Orders {% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('assets/backend-client/css/layout-datatables.css') }}" rel="stylesheet" type="text/css"
+          />
+{% endblock %}
+{% block menu_orders_active %}class="active"{% endblock %}
+{% block body %}
+    <!-- page title -->
+    <header id="page-header">
+        <h1>Orders</h1>
+        <ol class="breadcrumb">
+            <li class="active">Orders</li>
+        </ol>
+    </header>
+    <!-- /page title -->
+    <div id="content" class="padding-20">
+        <!--
+                                PANEL CLASSES:
+                                    panel-default
+                                    panel-danger
+                                    panel-warning
+                                    panel-info
+                                    panel-success
+
+                                INFO: 	panel collapse - stored on user localStorage (handled by app.js _panels() function).
+                                        All pannels should have an unique ID or the panel collapse status will not be stored!
+                            -->
+        <div id="order" class="panel panel-default" data-url="{{ path('orders') }}">
+            <div class="panel-heading">
+                 <span class="title elipsis">
+                     <strong class="center-text">All Orders</strong> <!-- panel title -->
+                 </span>
+            </div>
+
+            <!-- panel content -->
+            <div class="panel-body">
+                <div class="alert alert-info margin-bottom-30 action-table">
+                    <div class="pull-right">
+                        <button id="print-invoice" data-url="{{ path('orders_print_orders_invoices') }}" type="button" class="btn btn-default">Print Invoice(s)</button>
+                        <button id="print-dispatch-note" data-url="{{ path('orders_print_orders_dispatch_notes') }}" type="button" class="btn btn-default">Print Dispatch Note(s)</button>
+                        <button id="print-all" data-url="{{ path('orders_print_orders_invoices_dispatch_notes') }}" type="button" class="btn btn-success">Print All</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <div id="js-search-date" class="dataTables_custom pull-left">
+                            {{ knp_pagination_filter(orders, {'ord.createdAt': 'Sort by Order date'}) }}
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <div id="js-search-client" class="dataTables_custom pull-right">
+                            {{ knp_pagination_filter(orders, {'ord.lastName': 'Sort by Customer Name'}) }}
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <form action="{{ path('orders') }}" method="get">
+                            <div class="dataTables_length pull-left" id="datatable_sample_length">
+                                <label>
+                                    <select id="records" name="records" class="form-control input-xsmall input-inline" onchange="changeRecords()">
+                                        <optgroup label="Selected">
+                                            <option value="" selected>Select</option>
+                                        </optgroup>
+                                        <optgroup label="Options">
+                                            <option value="15">15</option>
+                                            <option value="30">30</option>
+                                            <option value="50">50</option>
+                                            <option value="100">100</option>
+                                            <option value="200">200</option>
+                                        </optgroup>
+                                    </select> records per page
+                                </label>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="table-scrollable">
+                    <table class="table table-striped table-bordered table-hover table-responsive" id="datatable_sample">
+                        <thead>
+                        <tr>
+                            <th class="js-table-checkbox">
+                                <input type="checkbox">
+                            </th>
+                            <th class="col-sm-1">
+                                {{ knp_pagination_sortable(orders, 'ID', 'ord.id') }}
+                                {% if orders.isSorted('ord.id') %}
+                                    {% if (app.request.query.get('direction') != 'desc') %}
+                                        <i class="fa fa-caret-up" aria-hidden="true"></i>
+                                    {% else %}
+                                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                                    {% endif %}
+                                {% endif %}
+                            </th>
+                            <th class="col-sm-2">
+                                {{ knp_pagination_sortable(orders, 'Order date', 'ord.createdAt') }}
+                                {% if orders.isSorted('ord.createdAt') %}
+                                    {% if (app.request.query.get('direction') != 'desc') %}
+                                        <i class="fa fa-caret-up" aria-hidden="true"></i>
+                                    {% else %}
+                                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                                    {% endif %}
+                                {% endif %}
+                            </th>
+                            <th class="col-sm-3">
+                                {{ knp_pagination_sortable(orders, 'Name', 'ord.lastName') }}
+                                {% if orders.isSorted('ord.lastName') %}
+                                    {% if (app.request.query.get('direction') != 'desc') %}
+                                        <i class="fa fa-caret-up" aria-hidden="true"></i>
+                                    {% else %}
+                                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                                    {% endif %}
+                                {% endif %}
+                            </th>
+                            <th class="col-sm-1">
+                                {{ knp_pagination_sortable(orders, 'Total', 'ord.orderAmount') }}
+                                {% if orders.isSorted('ord.orderAmount') %}
+                                    {% if (app.request.query.get('direction') != 'desc') %}
+                                        <i class="fa fa-caret-up" aria-hidden="true"></i>
+                                    {% else %}
+                                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                                    {% endif %}
+                                {% endif %}
+                            </th>
+                            <th class="col-sm-1 text-center">Status</th>
+                            <th class="col-sm-4 text-center">Action</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for order in orders %}
+                            <tr id="js-order-{{ order.id }}" class="odd gradeX">
+                                <td>
+                                    <input type="checkbox" name="orders" value={{ order.id }}>
+                                </td>
+                                <td>{{ order.id }}</td>
+                                <td>{{ order.createdAt|date("d/m/Y") }}</td>
+                                <td>
+                                    {% if order.user.fullName is defined %}
+                                        <a title="Link to the Client {{ order.user.fullName }}" href="{{ path('clients_view', {'id': order.user.id }) }}">
+                                    {% endif %}
+                                            {{ order.fullName|title }}
+                                    {% if order.user.fullName is defined %}
+                                        </a>
+                                    {% endif %}
+                                </td>
+                                <td>£ {{ order.orderAmount }}</td>
+                                <td class="js-status">
+                                    <label class="switch switch-info switch-round">
+                                        <input type="checkbox" id="status-{{ order.id }}" {% if order.status.id < 2 %}checked=""{% endif %}
+                                               data-url="{{ path('orders_change_status', {'id': order.id}) }}"
+                                        >
+                                        <span class="switch-label" data-on="YES" data-off="NO"></span>
+                                    </label>
+                                </td>
+                                <td class="text-center"><a title="Link to order of {{ order.fullName }}" href="{{ path('orders_view', {'id': order.id }) }}">View/Edit</a> </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pull-left">
+                    Total orders: {{ orders.getTotalItemCount }}
+                </div>
+                <div class="navigation pull-right">
+                    {{ knp_pagination_render(orders) }}
+                </div>
+
+            </div>
+            <!-- /panel content -->
+
+        </div>
+        <!-- /PANEL -->
+    </div>
+
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="text/javascript" src="{{ asset('min/index.php?f=assets/backend-client/plugins/jquery/jquery-ui.min.js') }}"></script>
+
+    <script src="{{ asset('min/index.php?f=assets/backend-client/js/custom/Order.js') }}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#js-search-date').find('input').replaceWith( '<input type="text" class="masked no-arrow" data-format="9999-99-99" data-placeholder="_" placeholder="YYYY-MM-DD" name="searchValue">' );
+            $('#js-search-client').find('input').replaceWith( '<input type="text" name="searchValue">' );
+
+            var $order = $('#order');
+
+            var order = new Order($order);
+        });
+
+        function changeRecords() {
+
+            var e = document.getElementById('records');
+
+            var strUser = e.options[e.selectedIndex].value;
+
+            var url = 'orders';
+
+            {% if app.request.query.all() %}
+
+            {% for parameter,value in app.request.query.all() %}
+
+            {% if (parameter == 'search') %}
+
+            url = '/admin/orders' + '?' + '{{ parameter }}' + '=' + '{{ value }}';
+            {% elseif (parameter == 'searchValue') %}
+
+            url = url + '&' + '{{ parameter }}' + '=' + '{{ value }}';
+            {% endif %}
+            {% endfor %}
+
+            url = url + '&' + 'records' + '=' + strUser;
+
+            window.location.href = url;
+            {% endif %}
+
+            url = url + '?' + 'records' + '=' + strUser;
+
+            window.location.href = url;
+        }
+    </script>
+{% endblock %}

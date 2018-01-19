@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <title>Smarty Admin</title>
+    <meta name="description" content="" />
+    <meta name="Author" content="Dorin Grigoras [www.stepofweb.com]" />
+
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=0" />
+
+    <style>
+        body {
+            color: #000;
+            height: 100%;
+            direction: ltr;
+            overflow-x: hidden;
+            font-size: 14px;
+            font-family: 'Open Sans', Arial, sans-serif;
+        }
+        h1 {
+            color: #000;
+            margin: 0 0 30px 0;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            text-align: center;
+        }
+        h2 {
+            color: #000;
+            margin: 0 0 30px 0;
+            line-height: 1.5;
+            font-size: 15px;
+            -webkit-font-smoothing: antialiased;
+            text-align: center;
+        }
+        .padding-20 {
+            padding: 20px !important;
+        }
+        .panel-default {
+            border: 0;
+        }
+        .page {
+              overflow: hidden;
+              page-break-after: always;
+          }
+        .page:last-child {
+            overflow: hidden;
+            page-break-after: initial;
+        }
+        .panel-body {
+            background-color: #fff;
+            padding: 15px;
+            -webkit-border-radius: 0;
+            -moz-border-radius: 0;
+            border-radius: 0;
+        }
+        .row {
+            margin-right: -15px;
+            margin-left: -15px;
+        }
+        th {
+            border-bottom: solid 1px black;
+            padding-bottom: 5px;
+        }
+        td {
+            padding-top: 10px;
+        }
+        .text-left {
+            text-align: left;
+        }
+        .text-right {
+            text-align: right;
+        }
+        .text-center {
+            text-align: center;
+        }
+        b, strong {
+            font-weight: 700;
+        }
+        h4 {
+            letter-spacing: normal;
+            margin: 0 0 14px 0;
+        }
+        .list-unstyled {
+            padding-left: 0;
+            list-style: none;
+        }
+        p {
+            font-size: 20px;
+        }
+        .table-responsive {
+            min-height: .01%;
+            overflow-x: auto;
+            width: 100%;
+        }
+    </style>
+
+</head>
+<!--
+    .boxed = boxed version
+-->
+<body>
+<section id="middle">
+    <div id="content" class="padding-20">
+        <div class="panel panel-default page">
+            <div class="panel-body">
+                <div class="row">
+
+                    <h1>{{ company_name }} - INVOICE N&deg; {{ order.id }}</h1>
+
+                    <h2><i>DATE: {{ order.createdAt|date("d/m/Y") }}</i></h2>
+
+                </div>
+                <div class="table-responsive">
+                    <table width="100%" class="table table-condensed nomargin">
+                        <tr>
+                            <td width="50%" valign="top">
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF">
+                                    <tbody><tr>
+                                        <td width="100%" align="center" colspan="2"><h2>Invoice Details</h2></td>
+                                    </tr>
+                                    {% if order.invoiceAddress["company"] %}
+                                        <tr>
+                                            <td><strong>Company:</strong></td>
+                                            <td>{{ order.invoiceAddress["company"] }}</td>
+                                        </tr>
+                                    {% endif %}
+                                    <tr>
+                                        <td><strong>Name:</strong></td>
+                                        <td>{{ order.fullName }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Address:</strong></td>
+                                        <td>
+                                            {{ order.invoiceAddress["address1"] }}
+                                            {% if order.invoiceAddress["address2"] %}
+                                                <br>
+                                                {{ order.invoiceAddress["address2"] }}
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td>{{ order.invoiceAddress["city"] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>&nbsp;</strong></td>
+                                        <td>{{ order.invoiceAddress["postcode"] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Phone:</strong></td>
+                                        <td>{{ order.invoiceAddress["phone"] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Email:</strong></td>
+                                        <td>{{ order.email }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td width="50%" valign="top">
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF">
+                                    <tbody><tr>
+                                        <td width="100%" align="center" colspan="2"><h2>Delivery Details</h2></td>
+                                    </tr>
+                                    {% if order.deliveryAddress["company"] %}
+                                        <tr>
+                                            <td><strong>Company:</strong></td>
+                                            <td>{{ order.deliveryAddress["company"] }}</td>
+                                        </tr>
+                                    {% endif %}
+                                    <tr>
+                                        <td><strong>Name:</strong></td>
+                                        <td>{{ order.deliveryAddress["firstName"] }} {{ order.deliveryAddress["lastName"] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Address:</strong></td>
+                                        <td>
+                                            {{ order.deliveryAddress["address1"] }}
+                                            {% if order.deliveryAddress["address2"] %}
+                                                <br>
+                                                {{ order.deliveryAddress["address2"] }}
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td>{{ order.deliveryAddress["city"] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>&nbsp;</strong></td>
+                                        <td>{{ order.deliveryAddress["postcode"] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Phone:</strong></td>
+                                        <td>{{ order.deliveryAddress["phone"] }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <p></p>
+                <div class="table-responsive">
+                    <table width="100%" class="table table-condensed nomargin">
+                        <thead>
+                        <tr>
+                            <th width="10%">ID</th>
+                            <th width="60%">Item Name</th>
+                            <th width="10%">Quantity</th>
+                            <th width="10%">Unit Price</th>
+                            <th width="10%">Total Price</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in order.orderDescription %}
+                            <tr>
+                                <td class="text-center">{{ item["id"] }}</td>
+                                <td class="text-center">{{ item["name"] }}</td>
+                                <td class="text-center">{{ item["quantity"] }}</td>
+                                <td class="text-center">£ {{ item["price"]|number_format(2, '.', ',') }}</td>
+                                <td class="text-center">£ {{ item["total"]|number_format(2, '.', ',') }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <hr class="nomargin-top">
+
+                <div class="col-sm-6 text-right">
+
+                    <ul class="list-unstyled">
+                        <li><strong>Subtotal:</strong> £ {{ order.orderAmount|number_format(2, '.', ',') }}</li>
+                        <li>VAT: £ {{ (order.orderAmount * 1.2 - order.orderAmount)|number_format(2, '.', ',') }}</li>
+                    </ul>
+                    <ul class="list-unstyled">
+                        <li><strong>Subtotal Delivery:</strong> £ {{ order.deliveryAmount|number_format(2, '.', ',') }}</li>
+                        <li>VAT: £ {{ (order.deliveryAmount * 1.2 - order.deliveryAmount)|number_format(2, '.', ',') }}</li>
+                    </ul>
+                    <ul class="list-unstyled">
+                        <li><strong>TOTAL:</strong> £ {{ (order.orderAmount * 1.2 + order.deliveryAmount * 1.2)|number_format(2, '.', ',') }}</li>
+                    </ul>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-sm-6 text-left">
+                        {% if order.comment %}
+                            <p class="nomargin nopadding">
+                                <strong>Note:</strong>
+                                {{ order.comment }}
+                            </p><br><!-- no P margin for printing - use <br> instead -->
+                        {% endif %}
+
+                        <h4><strong>Contact</strong> Details</h4>
+
+                        <address>
+                            PO Box 21132 <br>
+                            Vivas 2355 Australia<br>
+                            Phone: 1-800-565-2390 <br>
+                            Fax: 1-800-565-2390 <br>
+                            Email:support@yourname.com
+                        </address>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /MIDDLE -->
+</body>
+</html>

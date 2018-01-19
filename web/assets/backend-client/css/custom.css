@@ -1,0 +1,127 @@
+/** ********************************************** **
+Custom code HERE
+*************************************************** **/
+
+
+/** Added quick class
+ **************************************************************** **/
+
+hr.transparent {
+	border-color: transparent;
+}
+
+.action-table {
+	height:78px;
+}
+
+.display-none {
+	display: none;
+}
+
+/** End Added quick class
+ **************************************************************** **/
+
+/** Data Tables
+ **************************************************************** **/
+
+.table-hover>tbody>tr:hover {
+	background-color: #d9edf7;
+}
+
+.dataTables_custom select {
+	width: 190px;
+	float: left;
+	margin-right: 10px !important;
+}
+
+#related-products .dataTables_custom select {
+	width: 150px;
+}
+
+.dataTables_custom input {
+	border: 2px solid #E5E7E9;
+	height: 46px;
+	padding: 12px;
+	outline: none;
+	line-height: 1 !important;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
+.dataTables_custom button:hover {
+	background-color: rgba(75, 83, 84, 0.85);
+}
+
+.dataTables_custom button {
+	background-color: #4b5354;
+	color: #fff;
+	display: inline-block;
+	padding: 6px 12px;
+	margin-bottom: 0;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1.42857143;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	-ms-touch-action: manipulation;
+	touch-action: manipulation;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	background-image: none;
+	border: 1px solid transparent;
+	border-radius: 4px;
+}
+
+/** End Data Tables
+ **************************************************************** **/
+
+/** Order Viewing
+ **************************************************************** **/
+
+.top-space {
+	margin-top: 10px;
+}
+
+/** End Order Viewing
+ **************************************************************** **/
+
+/** Form
+ **************************************************************** **/
+
+.field-error {
+	border: #bf6464 2px dashed !important;
+	background-color: #fdfbfb !important;
+	-webkit-transition: all 0.2s ease-in;
+	-moz-transition: all 0.2s ease-in;
+	-o-transition: all 0.2s ease-in;
+	transition: all 0.2s ease-in;
+}
+
+select[name="search"] {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	text-indent: 1px;
+	text-overflow: '';
+}
+
+/** End Form
+ **************************************************************** **/
+
+/** Related and Allocated Products
+ **************************************************************** **/
+
+.special-product {
+	display: inline;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: baseline;
+	border-radius: .25em;
+}
+
+/** End Related and Allocated Products
+ **************************************************************** **/

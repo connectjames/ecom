@@ -1,0 +1,303 @@
+{% extends 'base.html.twig' %}
+{% block metaTitle %}Checkout Invoice{% endblock %}
+{% block metaKeywords %}checkout invoice{% endblock %}
+{% block basket %}{% endblock %}
+{% block sticky %}{% endblock %}
+{% block body %}
+    <div id="checkout">
+        <section class="page-header page-header-xs">
+            <div class="container">
+
+                <h1>Checkout</h1>
+
+                <!-- breadcrumbs -->
+                <ol class="breadcrumb">
+                    <li><a href="{{ path('index') }}">Home</a></li>
+                    <li><a href="{{ path('checkout_invoice') }}">Checkout - Invoice</a></li>
+                </ol><!-- /breadcrumbs -->
+
+            </div>
+        </section>
+        <!-- /PAGE HEADER -->
+
+
+
+        <!-- CART -->
+        <section>
+            <div id="beginning" class="container">
+
+                <ul class="process-steps nav nav-justified">
+                    <li>
+                        <a href="{{ path('basket') }}"><i class="fa fa-shopping-cart"></i></a>
+                        <h5>Basket</h5>
+                    </li>
+                    <li class="active">
+                        <a href="{{ path('checkout_invoice') }}#beginning"><i class="fa fa-file-text-o"></i></a>
+                        <h5>Invoice Details</h5>
+                    </li>
+                    <li {% if not app.session.get('invoiceDetails') %}class="disabled js-disabled"{% endif %}>
+                        <a href="{% if app.session.get('invoiceDetails') %}{{ path('checkout_delivery') }}#beginning{% else %}#{% endif %}"><i class="fa fa-envelope-o margin-left-minus-six"></i></a>
+                        <h5>Delivery Details</h5>
+                    </li>
+                    <li {% if not app.session.get('deliveryDetails') %}class="disabled js-disabled"{% endif %}>
+                        <a href="{% if app.session.get('deliveryDetails') %}{{ path('checkout_review') }}#beginning{% else %}#{% endif %}"><i class="icon-ok"></i></a>
+                        <h5>Review & Secure Payment</h5>
+                    </li>
+                </ul>
+
+                <hr>
+
+                <!-- CHECKOUT -->
+                {{ form_start(formCheckoutInvoiceForm) }}
+
+                <div class="col-lg-7 col-sm-7">
+                    <div class="heading-title">
+                        <h4>Invoice Details</h4><i class="size-11">* Required fields</i>
+                        {% if not app.user %}
+                            <div class="col-lg-6 col-sm-5 pull-right">
+                                <a href="{{ path('security_login') }}" class="btn btn-primary"><i class="fa fa-external-link" aria-hidden="true"></i>
+                                    Login if you have an account</a>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="clear-both"></div>
+
+                    {{ form_errors(formCheckoutInvoiceForm) }}
+
+                    <!-- BILLING -->
+                    <fieldset>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6">
+                                <label>First Name *</label>
+                                {{ form_row(formCheckoutInvoiceForm.firstName,
+                                {'value' : invoiceDetails['invoiceAddress']['firstName'] is defined ? invoiceDetails['invoiceAddress']['firstName'] : app.user.firstName| default("") }
+                                ) }}
+                            </div>
+                            <div class="col-md-6 col-sm-6">
+                                <label>Last Name *</label>
+                                {{ form_row(formCheckoutInvoiceForm.lastName,
+                                {'value' : invoiceDetails['invoiceAddress']['lastName'] is defined ? invoiceDetails['invoiceAddress']['lastName'] : app.user.lastName| default("") }
+                                ) }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6">
+                                <label>Email *</label>
+                                {{ form_row(formCheckoutInvoiceForm.email,
+                                {'value' : invoiceDetails['email'] is defined ? invoiceDetails['email'] : app.user.email| default("") }
+                                ) }}
+                            </div>
+                            <div class="col-md-6 col-sm-6">
+                                <label>Company</label>
+                                {{ form_row(formCheckoutInvoiceForm.company,
+                                {'value' : invoiceDetails['invoiceAddress']['company'] is defined ? invoiceDetails['invoiceAddress']['company'] : app.user.invoiceAddress['company']| default("") }
+                                ) }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <label>Address *</label>
+                                {{ form_row(formCheckoutInvoiceForm.address1,
+                                {'value' : invoiceDetails['invoiceAddress']['address1'] is defined ? invoiceDetails['invoiceAddress']['address1'] : app.user.invoiceAddress['address1']| default("") }
+                                ) }}
+
+                                {{ form_row(formCheckoutInvoiceForm.address2,
+                                {'value' : invoiceDetails['invoiceAddress']['address2'] is defined ? invoiceDetails['invoiceAddress']['address2'] : app.user.invoiceAddress['address2']| default("") }
+                                ) }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6">
+                                <label>City *</label>
+                                {{ form_row(formCheckoutInvoiceForm.city,
+                                {'value' : invoiceDetails['invoiceAddress']['city'] is defined ? invoiceDetails['invoiceAddress']['city'] : app.user.invoiceAddress['city']| default("") }
+                                ) }}
+                            </div>
+                            <div class="col-md-6 col-sm-6">
+                                <label>Zip/Postal Code *</label>
+                                {{ form_row(formCheckoutInvoiceForm.postcode,
+                                {'value' : invoiceDetails['invoiceAddress']['postcode'] is defined ? invoiceDetails['invoiceAddress']['postcode'] : app.user.invoiceAddress['postcode']| default("") }
+                                ) }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6">
+                                <label>Phone *</label>
+                                {{ form_row(formCheckoutInvoiceForm.phone,
+                                {'value' : invoiceDetails['invoiceAddress']['phone'] is defined ? invoiceDetails['invoiceAddress']['phone'] : app.user.invoiceAddress['phone']| default("") }
+                                ) }}
+                            </div>
+                            <div class="col-md-6 col-sm-6">
+                                <label>Purchase Order Number</label>
+                                {{ form_row(formCheckoutInvoiceForm.purchaseOrderNumber,
+                                {'value' : invoiceDetails['purchaseOrderNumber'] is defined ? invoiceDetails['purchaseOrderNumber'] : "" }
+                                ) }}
+                            </div>
+                        </div>
+
+                    </fieldset>
+                    <!-- /BILLING -->
+                </div>
+
+                <div class="col-lg-5 col-sm-5">
+                    <div class="heading-title">
+                        <h4>Your Basket</h4>
+                    </div>
+
+                    <!-- TOTAL / PLACE ORDER -->
+                    <div class="toggle-transparent toggle-bordered-full clearfix">
+                        <div class="toggle active">
+                            <div class="toggle-content">
+
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>Product Name</th>
+                                            <th>Qty</th>
+                                            <th class="text-right">Total</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for basketProduct in basketDetails["basketProducts"] %}
+                                            <tr>
+                                                <td>{{ basketProduct['name'] }}</td>
+                                                <td>{{ basketProduct['quantity'] }}</td>
+                                                <td class="text-right">£{{ basketProduct['price']|number_format(2, '.', ',') }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <span class="clearfix">
+                                                <span class="pull-right">£{{ basketDetails["basketTotal"]|number_format(2, '.', ',') }}</span>
+                                                <strong class="pull-left">Subtotal:</strong>
+                                            </span>
+                                <br>
+                                <span class="clearfix">
+                                                <span class="pull-right">£{{ (basketDetails["basketTotal"] * 1.2 - basketDetails["basketTotal"])|number_format(2, '.', ',') }}</span>
+                                                <span class="pull-left">VAT:</span>
+                                            </span>
+
+                                <hr />
+
+                                {% if basketDetails["deliveryAmount"] %}
+                                    <span class="clearfix">
+                                                <span class="pull-right">£{{ basketDetails["deliveryAmount"]|number_format(2, '.', ',') }}</span>
+                                                <strong class="pull-left">Delivery Subtotal:</strong>
+                                            </span>
+                                    <br>
+                                    <span class="clearfix">
+                                                    <span class="pull-right">£{{ (basketDetails["deliveryAmount"] * 1.2 - basketDetails["deliveryAmount"])|number_format(2, '.', ',') }}</span>
+                                                    <span class="pull-left">Delivery VAT:</span>
+                                                </span>
+
+                                    <hr />
+                                {% endif %}
+
+                                <span class="clearfix">
+                                            {% if basketDetails["deliveryAmount"] %}
+                                                <span class="pull-right size-20">£{{ ((basketDetails["deliveryAmount"] + basketDetails["basketTotal"]) * 1.2)|number_format(2, '.', ',') }}</span>
+                                            {% else %}
+                                                <span class="pull-right size-20">£{{ (basketDetails["basketTotal"] * 1.2)|number_format(2, '.', ',') }}</span>
+                                            {% endif %}
+                                    <strong class="pull-left">TOTAL:</strong>
+                                    </span>
+
+                            </div>
+
+                            <hr />
+
+                            <button type="submit" class="js-submit btn btn-primary btn-lg btn-block size-15"><i class="fa fa-mail-forward"></i> CHECKOUT & DELIVERY</button>
+                        </div>
+                    </div>
+                    <!-- /TOTAL / PLACE ORDER -->
+                </div>
+                {{ form_end(formCheckoutInvoiceForm) }}
+                <!-- /CHECKOUT -->
+
+            </div>
+        </section>
+        <!-- /CART -->
+
+        <div id="login" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Why create an account with us?</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post">
+                            <div class="col-lg-12 col-sm-12">
+                                <div class="size-15">
+                                    Here are the benefits:<br>
+                                    <ul>
+                                        <li>it stores your invoice and delivery address - Fast Checkout!</li>
+                                        <li>it stores your order history - Reorder Easily</li>
+                                    </ul>
+                                    <p>Click on the button below to get started (you won't loose your basket)</p>
+                                </div>
+
+                                <a href="{{ path('security_login') }}" class="btn btn-primary btn-lg btn-block size-15"><i class="fa fa-mail-forward"></i> Create an account</a>
+                            </div>
+                        </form>
+                    </div>
+                    <p> </p>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+
+    <script src="{{ asset('min/index.php?f=assets/frontend-client/js/custom/Checkout.js') }}"></script>
+    <script src="{{ asset('min/index.php?f=assets/frontend-client/js/custom/CheckoutInvoice.js') }}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            var $checkout = $('#checkout');
+
+            var checkout = new Checkout($checkout);
+            var checkoutInvoice = new CheckoutInvoice($checkout);
+
+        });
+
+        {% if not app.user %}
+        $(window).load(function(){
+            $('#login').modal('show');
+        });
+        {% endif %}
+
+        var ua = window.navigator.userAgent;
+        var msie = ua.indexOf("MSIE ");
+
+        if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+            if(window.localStorage) {
+                if(!localStorage.getItem('firstLoad')) {
+                    localStorage['firstLoad'] = true;
+                    window.location.reload();
+                }
+                else {
+                    localStorage.removeItem('firstLoad');
+                }
+            }
+        }
+    </script>
+
+{% endblock %}

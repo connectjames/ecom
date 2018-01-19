@@ -1,0 +1,237 @@
+{% extends 'base.html.twig' %}
+{% block metaTitle %}{{ category.metaTitle }}{% endblock %}
+{% block metaKeywords %}{{ category.metaKeywords|lower }}{% endblock %}
+{% block metaDescription %}{{ category.metaDescription }}{% endblock %}
+{% block canonical %}{{ absolute_url(path('sub_sub_category', {'categoryLevel1': categoryLevel1.slug, 'categoryLevel2': categoryLevel2.slug, 'categoryName': category.slug})) }}{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('assets/backend-client/plugins/jquery-confirm/jquery-confirm.min.css') }}" rel="stylesheet" type="text/css"
+          />
+{% endblock %}
+{% block absorbents %}{% if categoryLevel1.slug == "absorbents" %}active{% endif %}{% endblock %}
+{% block spillKits %}{% if categoryLevel1.slug == "spill-kits" %}active{% endif %}{% endblock %}
+{% block temporaryBunding %}{% if categoryLevel1.slug == "temporary-bunding" %}active{% endif %}{% endblock %}
+{% block training %}{% if categoryLevel1.slug == "training" %}active{% endif %}{% endblock %}
+{% block drainProtection %}{% if categoryLevel1.slug == "drain-protection" %}active{% endif %}{% endblock %}
+{% block drumStorage %}{% if categoryLevel1.slug == "drum-storage" %}active{% endif %}{% endblock %}
+{% block accessories %}{% if categoryLevel1.slug == "spill-kit-accessories" %}active{% endif %}{% endblock %}
+{% block tradeCounter %}{% if categoryLevel1.slug == "trade-counter" %}active{% endif %}{% endblock %}
+{% block body %}
+    <div id="category">
+        <section class="page-header page-header-xs">
+            <div class="container">
+
+                <h1>{{ category.name }}</h1>
+
+                <!-- breadcrumbs -->
+                <ol class="breadcrumb">
+                    <li><a href="{{ path('index') }}">Home</a></li>
+                    <li><a href="{{ path('category', {'categoryName': categoryLevel1.slug}) }}">{{ categoryLevel1.name }}</a></li>
+                    <li><a href="{{ path('sub_category', {'categoryLevel1': categoryLevel1.slug, 'categoryName': categoryLevel2.slug}) }}">{{ categoryLevel2.name }}</a></li>
+                    <li class="active"><a href="{{ path('sub_sub_category', {'categoryLevel1': categoryLevel1.slug, 'categoryLevel2': categoryLevel2.slug, 'categoryName': category.slug}) }}">{{ category.name }}</a></li>
+                </ol><!-- /breadcrumbs -->
+
+            </div>
+        </section>
+        <!-- /PAGE HEADER -->
+
+        <!-- -->
+        <section>
+            <div class="container">
+
+                <div class="row">
+
+                    <!-- RIGHT -->
+                    <div class="col-lg-9 col-md-9 col-sm-9 col-lg-push-3 col-md-push-3 col-sm-push-3">
+
+                        {% if category.sub %}
+                            <h2>{{ category.sub }}</h2>
+                        {% endif %}
+
+                        <p>{{ category.description|raw }}</p>
+
+                        <ul class="shop-item-list row list-inline nomargin">
+
+                            <!-- ITEM -->
+                            {% for categoryProduct in categoryProducts %}
+                                <li class="col-lg-3 col-sm-3">
+
+                                    <div class="shop-item">
+
+                                        <div class="thumbnail">
+                                            <!-- product image(s) -->
+                                            <a class="shop-item-image" href="{{ path('product_with_three_level_category', {'categoryLevel1': categoryLevel1.slug, 'categoryLevel2': categoryLevel2.slug, 'categoryName': category.slug, 'product': categoryProduct.slug }) }}">
+                                                <img class="img-responsive" src="{{ asset('assets/images/' ~ categoryProduct.imageName) | imagine_filter('relatedProduct') }}" alt="{{ categoryProduct.name }}" />
+                                            </a>
+                                            <!-- /product image(s) -->
+
+                                            {#<!-- hover buttons -->#}
+                                            {#<div class="shop-option-over"><!-- replace data-item-id width the real item ID - used by js/view/demo.shop.js -->#}
+                                                {#<a class="btn btn-default add-wishlist" href="#" data-item-id="7" data-toggle="tooltip" title="Add To Wishlist"><i class="fa fa-heart nopadding"></i></a>#}
+                                                {#<a class="btn btn-default add-compare" href="#" data-item-id="7" data-toggle="tooltip" title="Add To Compare"><i class="fa fa-bar-chart-o nopadding" data-toggle="tooltip"></i></a>#}
+                                            {#</div>#}
+                                            {#<!-- /hover buttons -->#}
+                                        </div>
+
+                                        <div class="shop-item-summary text-center">
+                                            <h2>{{ categoryProduct.name }}</h2>
+
+                                            {{ categoryProduct.shortDescription|raw }}
+
+                                            <!-- rating -->
+                                            <div class="shop-item-rating-line"></div>
+                                            <!-- /rating -->
+
+                                            <!-- price -->
+                                            <div class="shop-item-price">
+                                                {% if categoryProduct.price > 0 %}
+                                                    £{{ categoryProduct.price|number_format(2, '.', ',') }}
+                                                {% else %}
+                                                    POA
+                                                {% endif %}
+                                            </div>
+                                            <!-- /price -->
+                                        </div>
+
+                                        <!-- buttons -->
+                                        <div class="shop-item-buttons text-center">
+                                            <form name='{{ categoryProduct.slug }}' method="get">
+                                                <input id="add_to_basket_form_id" name="id" required="required" value="{{ categoryProduct.id }}" type="hidden">
+                                                {% if categoryProduct.price > 0 %}
+                                                    <button type="submit" class="btn btn-default">
+                                                        <i class="fa fa-cart-plus"></i> Add to Basket
+                                                    </button>
+                                                {% else %}
+                                                    <a href="{{ path('contact_us') }}" class="btn btn-default" title="Contact Us">CONTACT US</a>
+                                                {% endif %}
+                                            </form>
+                                        </div>
+                                        <!-- /buttons -->
+                                    </div>
+
+                                </li>
+                            {% endfor %}
+                            <!-- /ITEM -->
+
+                        </ul>
+
+                        <hr />
+
+                        <!-- Pagination Default -->
+                        <div class="text-center">
+                            {{ knp_pagination_render(categoryProducts) }}
+                        </div>
+                        <!-- /Pagination Default -->
+
+                    </div>
+
+
+                    <!-- LEFT -->
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-lg-pull-9 col-md-pull-9 col-sm-pull-9">
+
+                        <!-- FEATURED -->
+                        <div class="margin-bottom-60">
+
+                            <h2 class="owl-featured">FEATURED</h2>
+                            <div class="owl-carousel featured" data-plugin-options='{"singleItem": true, "stopOnHover":false, "autoPlay":false, "autoHeight": false, "navigation": true, "pagination": false}'>
+                                {% for featuredProduct in featuredProducts if featuredProduct.display %}
+                                    <div><!-- SLIDE 1 -->
+                                        <ul class="list-unstyled nomargin nopadding text-left">
+
+                                            <li class="clearfix"><!-- item -->
+                                                <div class="thumbnail featured clearfix pull-left">
+                                                    <a href="{{ path('product_only', {'product': featuredProduct.slug}) }}">
+                                                        <img src="{{ asset('assets/images/' ~ featuredProduct.imageName) | imagine_filter('basket') }}" width="80" height="80" alt="{{ featuredProduct.name }}">
+                                                    </a>
+                                                </div>
+
+                                                <a class="block size-12" href="{{ path('product_only', {'product': featuredProduct.slug}) }}">{{ featuredProduct.name }}</a>
+                                                <div class="rating rating-5 size-13 width-100 text-left"><!-- rating-0 ... rating-5 --></div>
+                                                <div class="size-18 text-left">£{{ featuredProduct.price }}</div>
+                                            </li><!-- /item -->
+
+                                        </ul>
+                                    </div><!-- /SLIDE 1 -->
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+                        <!-- /FEATURED -->
+
+
+                        <!-- HTML BLOCK -->
+                        {#<div class="margin-bottom-60">#}
+                            {#<h4>HTML BLOCK</h4>#}
+                            {#<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non placerat mi. Etiam non tellus eunit.</p>#}
+
+                            {#<form action="#" role="form" method="post">#}
+                                {#<div class="input-group">#}
+                                    {#<span class="input-group-addon"><i class="fa fa-envelope"></i></span>#}
+                                    {#<input type="email" id="email" name="email" class="form-control required" placeholder="Enter your Email">#}
+                                    {#<span class="input-group-btn">#}
+											{#<button class="btn btn-success" type="submit"><i class="glyphicon glyphicon-send"></i></button>#}
+										{#</span>#}
+                                {#</div>#}
+                            {#</form>#}
+
+                        {#</div>#}
+                        <!-- /HTML BLOCK -->
+
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+        <!-- / -->
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('min/index.php?f=assets/backend-client/plugins/jquery-confirm/jquery-confirm.min.js') }}"></script>
+
+    <script src="{{ asset('min/index.php?f=assets/frontend-client/js/custom/BasketAdd.js') }}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            var $category = $('#category');
+
+            var category = new BasketAdd($category);
+        });
+    </script>
+
+    <script type="application/ld+json">
+        {
+          "@context": "http://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "item": {
+              "@id": "{{ path('category', {'categoryName': categoryLevel1.slug}) }}",
+              "name": "{{ categoryLevel1.name }}",
+              "image": "{{ asset('assets/images/' ~ categoryLevel1.imageName) | imagine_filter('category') }}"
+            }
+          },{
+            "@type": "ListItem",
+            "position": 2,
+            "item": {
+              "@id": "{{ path('sub_category', {'categoryLevel1': categoryLevel1.slug, 'categoryName': categoryLevel2.slug}) }}",
+              "name": "{{ categoryLevel2.name }}",
+              "image": "{{ asset('assets/images/' ~ categoryLevel2.imageName) | imagine_filter('category') }}"
+            }
+          },{
+            "@type": "ListItem",
+            "position": 3,
+            "item": {
+              "@id": "{{ path('sub_sub_category', {'categoryLevel1': categoryLevel1.slug, 'categoryLevel2': categoryLevel2.slug, 'categoryName': category.slug}) }}",
+              "name": "{{ category.name }}",
+              "image": "{{ asset('assets/images/' ~ category.imageName) | imagine_filter('category') }}"
+            }
+          }]
+        }
+    </script>
+
+{% endblock %}

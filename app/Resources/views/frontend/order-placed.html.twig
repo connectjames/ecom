@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+{% block metaTitle %}Order Placed{% endblock %}
+{% block metaKeywords %}order placed{% endblock %}
+{% block basket %}{% endblock %}
+{% block sticky %}{% endblock %}
+{% block body %}
+    <div id="order-placed">
+        <section class="page-header page-header-xs">
+            <div class="container">
+
+                <h1>Order Placed</h1>
+
+                <!-- breadcrumbs -->
+                <ol class="breadcrumb">
+                    <li><a href="{{ path('index') }}">Home</a></li>
+                    <li><a href="{{ path('checkout_order') }}">Order Placed</a></li>
+                </ol><!-- /breadcrumbs -->
+
+            </div>
+        </section>
+        <!-- /PAGE HEADER -->
+
+        <!-- CART -->
+        <section>
+            <div class="container">
+
+                <!-- CHECKOUT FINAL MESSAGE -->
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h3>Thank you, {{ order.firstName }} {{ order.lastName }}.</h3>
+
+                        <p>
+                            Your order has been placed. In a few moments you will receive an order confirmation email from us.<br>
+                            You can also explore more of our <a href="{{ path('index') }}">products</a>.
+                        </p>
+
+                        <hr>
+
+                        <p>
+                            Thank you very much for choosing us,<br>
+                            <strong>{{ company_name }} Team</strong>
+                        </p>
+                    </div>
+                </div>
+                <!-- /CHECKOUT FINAL MESSAGE -->
+
+            </div>
+        </section>
+        <!-- /CART -->
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://apis.google.com/js/platform.js?onload=renderOptIn" async defer></script>
+
+    <script>
+        window.renderOptIn = function() {
+            window.gapi.load('surveyoptin', function() {
+                window.gapi.surveyoptin.render(
+                        {
+                            "merchant_id": 116791060,
+                            "order_id": "{{ order.id }}",
+                            "email": "{{ order.email }}",
+                            "delivery_country": "GB",
+                            "estimated_delivery_date": "{{ order.createdAt|date_modify("+2 day")|date("Y-m-d") }}"
+                        });
+            });
+        }
+    </script>
+{% endblock %}

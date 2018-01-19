@@ -1,0 +1,41 @@
+<!-- QUICK SHOP BASKET -->
+<li class="quick-cart">
+    <a href="#">
+        <span class="badge badge-aqua btn-xs badge-corner">{{ basketQty }}</span>
+        <i class="fa fa-shopping-cart"></i>
+    </a>
+    <div class="quick-cart-box">
+        <h4>Basket</h4>
+        {% if basketProducts %}
+            <div class="quick-cart-wrapper">
+                {% for basketProduct in basketProducts %}
+                <a href="{{ basketProduct['url'] }}.html"><!-- basket item -->
+                    <img src="{{ asset('assets/images/' ~ basketProduct['imageName']) | imagine_filter('thumbnail') }}" width="45" height="45" alt="">
+                    <h6><span>{{ basketProduct['quantity'] }}x</span> {{ basketProduct['name'] }}</h6>
+                    <small>£{{ basketProduct['price'] }}</small>
+                </a><!-- /basket item -->
+                {% endfor %}
+
+            </div>
+
+            <!-- quick basket footer -->
+            <div class="quick-cart-footer clearfix">
+                <a href="{{ path('basket') }}" class="btn btn-default btn-xs pull-right">Go to your BASKET</a>
+                <span class="pull-left"><strong>TOTAL:</strong> £{{ basketTotal }}</span>
+            </div>
+            <div class="quick-cart-footer clearfix">
+                <a href="{{ path('checkout_invoice') }}#beginning"><button type="button" class="btn btn-primary btn-lg btn-block">CHECKOUT NOW</button></a>
+            </div>
+            <!-- /quick basket footer -->
+        {% else %}
+            <div class="quick-cart-wrapper">
+                <!-- NO ITEMS IN BASKET -->
+                <a class="text-center" href="#">
+                    <h6>YOUR BASKET IS EMPTY</h6>
+                </a>
+            </div>
+        {% endif %}
+
+    </div>
+</li>
+<!-- /QUICK SHOP BASKET -->

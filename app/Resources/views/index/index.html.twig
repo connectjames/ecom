@@ -1,0 +1,232 @@
+{% extends 'base.html.twig' %}
+{% block metaTitle %}Home{% endblock %}
+{% block metaKeywords %}{{ company_keywords }}{% endblock %}
+{% block metaDescription %}{{ company_description }}{% endblock %}
+{% block canonical %}{{ absolute_url(path('index')) }}{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('assets/backend-client/plugins/jquery-confirm/jquery-confirm.min.css') }}" rel="stylesheet" type="text/css"
+          />
+{% endblock %}
+{% block body %}
+    <div id="index">
+        <!-- FEATURED GRID -->
+        <section class="featured-grid">
+            <div class="container">
+
+                <div class="row">
+
+                    <div class="col-sm-6">
+                        <img src="{{ asset('assets/images/skd-home-1.png') }}" alt="Spill Kits Direct large range of products" class="opacity-5">
+                        <div class="absolute bottom-right text-right">
+                            <h1>
+                                <em>HUGE</em>
+                                <em class="weight-300">Range of Spill Kits & Consumables</em>
+                            </h1>
+                            <a class="btn btn-primary margin-top-10 size-25" href="#">Explore Now</a>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="relative">
+                            <img src="{{ asset('assets/images/skd-home-2.png') }}" alt="Spill Control and Pollution Prevention DVD" class="opacity-5">
+                            <div class="absolute text-right">
+                                <h2>Spill Control and Pollution Prevention DVD</h2>
+                                <p>
+                                    YOU DON'T WANT TO MISS IT!
+                                </p>
+
+                                <p class="font-lato margin-top-30 size-16 hidden-sm hidden-xs">The essential steps to rapid response.</p>
+                                <a class="btn btn-primary margin-top-20 size-25" href="{{ path('product_only', {'product': 'spill-control-and-pollution-prevention-dvd'}) }}">Shop Now <i class="fa fa-arrow-circle-o-right"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="relative">
+                            <img src="{{ asset('assets/images/skd-home-3.png') }}" alt="Superbe range of" class="opacity-5">
+                            <div class="absolute text-right">
+                                <h2>SPILL KITS</h2>
+                                <p>
+                                    YOU DON'T WANT TO MISS!
+                                </p>
+                                <a class="btn btn-primary margin-top-20 size-25" href="{{ path('category', {'categoryName': 'spill-kits'}) }}">Shop Now <i class="fa fa-arrow-circle-o-right"></i></a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+        <!-- /FEATURED GRID -->
+
+        <!-- SOME TEXT -->
+        <section>
+            <div class="container">
+
+                <p class="lead">Specialist Spill Control Providers. We offer a comprehensive range of Spill Kits & Consumables.</p>
+
+            </div>
+        </section>
+        <!-- /SOME TEXT -->
+
+        <!-- INFO BAR -->
+        <section class="info-bar info-bar-clean">
+            <div class="container">
+
+                <div class="row">
+
+                    <div class="col-sm-4">
+                        <i class="glyphicon glyphicon-globe"></i>
+                        <h3>NEXT DAY DELIVERY</h3>
+                        <p>On orders placed before 12pm</p>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <i class="glyphicon glyphicon-flag"></i>
+                        <h3>TECHNICAL SUPPORT</h3>
+                        <p>Monday to Friday, 9am till 5pm</p>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <i class="glyphicon glyphicon-heart"></i>
+                        <h3><span class="countTo">3680</span> HAPPY CUSTOMERS</h3>
+                        <p>Over 38 years in the business!</p>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+        <!-- /INFO BAR -->
+
+        <!-- NEW FEATURED -->
+        <section>
+            <div class="container">
+
+                <div class="heading-title heading-dotted">
+                    <h2 class="size-20">FEATURED PRODUCTS</h2>
+                </div>
+
+                <ul class="shop-item-list row list-inline nomargin">
+
+                    <!-- ITEM -->
+                    {% for featuredProduct in featuredProducts %}
+                        <li class="col-lg-2 col-sm-4">
+
+                            <div class="shop-item">
+                                <div class="thumbnail noborder nopadding">
+                                    <!-- product image(s) -->
+                                    <a class="shop-item-image" href="{{ featuredProduct.slug }}.html">
+                                        <img class="img-responsive" src="{{ asset('assets/images/' ~ featuredProduct.imageName) | imagine_filter('featured') }}" alt="" />
+                                    </a>
+                                    <!-- /product image(s) -->
+
+                                    <!-- hover buttons -->
+                                    <div class="shop-option-over">
+                                        <form name='{{ featuredProduct.slug }}' method="get">
+                                            <input id="add_to_basket_form_id" name="id" required="required" value="{{ featuredProduct.id }}" type="hidden">
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fa fa-cart-plus size-18"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <!-- /hover buttons -->
+
+                                </div>
+
+                                <div class="shop-item-summary text-center">
+                                    <h2 class="size-14">{{ featuredProduct.name }}</h2>
+
+                                    <!-- rating -->
+                                    <div class="shop-item-rating-line"></div>
+                                    <!-- /rating -->
+
+                                    <!-- price -->
+                                    <div class="shop-item-price">
+                                        £{{ featuredProduct.price }}
+                                    </div>
+                                    <!-- /price -->
+                                </div>
+
+                            </div>
+
+                        </li>
+                    {% endfor %}
+                    <!-- /ITEM -->
+
+                </ul>
+
+            </div>
+        </section>
+        <!-- FEATURED PRODUCTS -->
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('min/index.php?f=assets/backend-client/plugins/jquery-confirm/jquery-confirm.min.js') }}"></script>
+
+    <script src="{{ asset('min/index.php?f=assets/frontend-client/js/custom/BasketAdd.js') }}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            var $index = $('#index');
+
+            var index = new BasketAdd($index);
+        });
+    </script>
+
+    <script type="application/ld+json">
+        {
+          "@context": "http://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "item": {
+              "@id": "{{ path('index') }}",
+              "name": "Index",
+              "image": "{{ absolute_url(asset('assets/images/logo.png')) }}"
+            }
+          }]
+        }
+    </script>
+
+    <script type="application/ld+json">
+         { "@context": "http://schema.org",
+         "@type": "Organization",
+         "name": "{{ company_name }}",
+         "legalName" : "Oil Pollution Environmental Control Ltd",
+         "url": "{{ absolute_url(path('index')) }}",
+         "logo": "{{ absolute_url(asset('assets/images/logo.png')) }}",
+         "foundingDate": "1980",
+         "founders": [
+         {
+         "@type": "Person",
+         "name": "James Ilsley"
+         } ],
+         "address": {
+         "@type": "PostalAddress",
+         "streetAddress": "OPEC House, Martin Street",
+         "addressLocality": "Birstall, Batley",
+         "addressRegion": "West Yorkshire",
+         "postalCode": "WF17 9PJ",
+         "addressCountry": "United Kingdom"
+         },
+         "contactPoint": {
+         "@type": "ContactPoint",
+         "contactType": "customer support",
+         "telephone": "{{ company_number_href }}",
+         "email": "{{ company_email }}"
+         }
+         "sameAs": [
+         "{{ social_facebook }}",
+         "{{ social_gplus }}",
+         "{{ social_linkedin }}",
+         "{{ social_twitter }}"
+         ]
+         }
+    </script>
+
+{% endblock %}

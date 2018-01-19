@@ -1,0 +1,48 @@
+<div class="row">
+    <div class="col-md-6 col-sm-6">
+        <label>First Name *</label>
+        <div class="form-group"><input type="text" id="checkout_delivery_form_firstName" name="checkout_delivery_form[firstName]" required="required" class="form-control" value="{{ deliveryDetails["deliveryAddress"]["firstName"] is defined ? deliveryDetails["deliveryAddress"]["firstName"] : "" }}"></div>
+    </div>
+    <div class="col-md-6 col-sm-6">
+        <label>Last Name *</label>
+        <div class="form-group"><input type="text" id="checkout_delivery_form_lastName" name="checkout_delivery_form[lastName]" required="required" class="form-control" value="{{ deliveryDetails["deliveryAddress"]["lastName"] is defined ? deliveryDetails["deliveryAddress"]["lastName"] : "" }}"></div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 col-sm-6">
+        <label>Phone *</label>
+        <div class="form-group"><input type="text" id="checkout_delivery_form_phone" name="checkout_delivery_form[phone]" required="required" pattern="[0-9]*" class="form-control" value="{{ deliveryDetails["deliveryAddress"]["phone"] is defined ? deliveryDetails["deliveryAddress"]["phone"] : "" }}"></div>
+    </div>
+    <div class="col-md-6 col-sm-6">
+        <label>Company</label>
+        <div class="form-group"><input type="text" id="checkout_delivery_form_company" name="checkout_delivery_form[company]" class="form-control" value="{{ deliveryDetails["deliveryAddress"]["company"] is defined ? deliveryDetails["deliveryAddress"]["company"] : "" }}"></div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <label>Address *</label>
+        <div class="form-group"><input type="text" id="checkout_delivery_form_address1" name="checkout_delivery_form[address1]" required="required" placeholder="First line of address*" class="form-control" value="{{ deliveryDetails["deliveryAddress"]["address1"] is defined ? deliveryDetails["deliveryAddress"]["address1"] : "" }}"></div>
+
+        <div class="form-group"><input type="text" id="checkout_delivery_form_address2" name="checkout_delivery_form[address2]" placeholder="Second line of address" class="form-control" value="{{ deliveryDetails["deliveryAddress"]["address2"] is defined ? deliveryDetails["deliveryAddress"]["address2"] : "" }}"></div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 col-sm-6">
+        <label>City *</label>
+        <div class="form-group"><input type="text" id="checkout_delivery_form_city" name="checkout_delivery_form[city]" required="required" class="form-control" value="{{ deliveryDetails["deliveryAddress"]["city"] is defined ? deliveryDetails["deliveryAddress"]["city"] : "" }}"></div>
+    </div>
+    <div class="col-md-6 col-sm-6">
+        <label>Postcode *</label>
+        <div class="form-group"><input type="text" id="checkout_delivery_form_postcode" name="checkout_delivery_form[postcode]" required="required" class="uppercase form-control" minlength="6" maxlength="8" value="{{ deliveryDetails["deliveryAddress"]["postcode"] is defined ? deliveryDetails["deliveryAddress"]["postcode"] : "" }}"></div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12 col-sm-12">
+        <label>Comments</label>
+        <div class="form-group"><textarea id="checkout_delivery_form_comment" name="checkout_delivery_form[comment]" class="form-control">{{ deliveryDetails["comment"] is defined ? deliveryDetails["comment"] : "" }}</textarea></div>
+    </div>
+</div>

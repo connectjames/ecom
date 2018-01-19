@@ -1,0 +1,280 @@
+{% extends 'baseAdmin.html.twig' %}
+{% block metaTitle %}Delivery {% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('assets/backend-client/plugins/jquery-confirm/jquery-confirm.min.css') }}" rel="stylesheet" type="text/css"
+          />
+{% endblock %}
+{% block menu_delivery_active %}class="active"{% endblock %}
+{% block body %}
+<!-- page title -->
+<header id="page-header">
+    <h1>Shipping</h1>
+    <ol class="breadcrumb">
+        <li class="active">Shipping</li>
+    </ol>
+</header>
+<!-- /page title -->
+<div id="content" class="padding-20">
+    <!--
+                            PANEL CLASSES:
+                                panel-default
+                                panel-danger
+                                panel-warning
+                                panel-info
+                                panel-success
+
+                            INFO: 	panel collapse - stored on user localStorage (handled by app.js _panels() function).
+                                    All pannels should have an unique ID or the panel collapse status will not be stored!
+                        -->
+    <div id="delivery" class="panel panel-default">
+        <div class="panel-heading">
+                 <span class="title elipsis">
+                     <strong class="center-text">Shipping</strong> <!-- panel title -->
+                 </span>
+        </div>
+
+        <!-- panel content -->
+        <div class="panel-body">
+            <div class="alert alert-info margin-bottom-30 action-table">
+            </div>
+        </div>
+        <!-- /panel content -->
+
+        <div class="col-md-6 top-space">
+
+            <!-- -- -->
+            <div id="dropshippers" class="panel panel-default">
+
+                <div class="panel-heading">
+
+                        <span class="elipsis"><!-- panel title -->
+                            <strong>Dropshippers</strong>
+                        </span>
+
+                    <!-- right options -->
+                    <ul class="options pull-right list-inline">
+                        <li><a href="#" class="opt panel_colapse" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Colapse"></a></li>
+                        <li><a href="#" class="opt panel_fullscreen hidden-xs" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand"></i></a></li>
+                    </ul>
+                    <!-- /right options -->
+
+                </div>
+
+                <div class="panel-body">
+                    <div class="table-scrollable">
+                        <table class="table table-striped table-bordered table-hover table-responsive">
+                            <thead>
+                            <tr>
+                                <th class="col-sm-1">
+                                    ID
+                                </th>
+                                <th class="col-sm-4">
+                                    Name
+                                </th>
+                                <th class="col-sm-8">
+                                    Email
+                                </th>
+                                <th class="col-sm-1">
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                </th>
+                                <th class="col-sm-1">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for dropshipper in dropshippers %}
+                                <tr>
+                                    <td>
+                                        {{ dropshipper.id }}
+                                    </td>
+                                    <td>
+                                        <div class="pull-left input-name">
+                                            <input type="text" class="width-90" name="name" title="name" required value="{{ dropshipper.name }}">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <form name="dropshipper-form-email-{{ dropshipper.id }}" method="get" id="dropshipper-email-form-{{ dropshipper.id }}" action="">
+                                            <div class="pull-left input-email">
+                                                <input class="width-200" type="email" name="email" title="email" required value="{{ dropshipper.email }}">
+                                            </div>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <a href="#" data-id="{{ dropshipper.id }}" data-url="{{ path('dropshippers_save', {id: dropshipper.id}) }}" title="Save Dropshipper" class="js-dropshipper-save"><i class="fa fa-check" aria-hidden="true"></i></a>
+                                    </td>
+                                    <td>
+                                        <a href="#" data-url="{{ path('dropshippers_delete', {id: dropshipper.id}) }}" title="Delete Dropshipper" class="js-dropshipper-delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- / -->
+
+        </div>
+
+        <div class="col-md-6 top-space">
+
+            <!-- -- -->
+            <div id="new-dropshipper" class="panel panel-default">
+
+                <div class="panel-heading">
+
+                        <span class="elipsis"><!-- panel title -->
+                            <strong>New Dropshipper</strong>
+                        </span>
+
+                    <!-- right options -->
+                    <ul class="options pull-right list-inline">
+                        <li><a href="#" class="opt panel_colapse" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Colapse"></a></li>
+                        <li><a href="#" class="opt panel_fullscreen hidden-xs" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand"></i></a></li>
+                    </ul>
+                    <!-- /right options -->
+
+                </div>
+
+                <div class="panel-body">
+                    <table class="table table-striped table-bordered table-hover table-responsive">
+                        <thead>
+                        <tr>
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                Email
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="js-dropshipper-form-email-new">
+                                <td>
+                                    <div class="input-name">
+                                        <input type="text" name="name" title="name" required>
+                                    </div>
+                                </td>
+                                <td>
+                                    <form name="dropshipper-form-email-new" method="get" id="dropshipper-email-form-new" action="">
+                                        <div class="input-email">
+                                            <input type="email" name="email" title="email" required>
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <button type="button" data-url="{{ path('dropshippers_new') }}" class="btn btn-success btn-lg btn-block js-save-new-dropshipper">Save Dropshipper</button>
+
+                </div>
+
+            </div>
+            <!-- / -->
+
+        </div>
+
+        <div class="col-md-12">
+
+            <!-- -- -->
+            <div id="delivery" class="panel panel-default">
+
+                <div class="panel-heading">
+
+                        <span class="elipsis"><!-- panel title -->
+                            <strong>Delivery</strong>
+                        </span>
+
+                    <!-- right options -->
+                    <ul class="options pull-right list-inline">
+                        <li><a href="#" class="opt panel_colapse" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Colapse"></a></li>
+                        <li><a href="#" class="opt panel_fullscreen hidden-xs" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand"></i></a></li>
+                    </ul>
+                    <!-- /right options -->
+
+                </div>
+
+                <div class="panel-body">
+                    <div class="row tabs nomargin">
+
+                        <!-- tabs -->
+                        <div class="col-md-3 col-sm-3 nopadding-right nopadding-left js-delivery-tab">
+                            <ul class="nav nav-tabs nav-stacked">
+                                {% for delivery in deliveries %}
+                                    <li class="tab-{{ delivery.id }}">
+                                        <a href="#tab_{{ delivery.id }}" data-toggle="tab" aria-expanded="false">
+                                            {{ delivery.name }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        <!-- tabs content -->
+                        <div class="col-md-9 col-sm-9 nopadding-right nopadding-left">
+                            <div class="tab-content">
+                                {% for delivery in deliveries %}
+                                    <div id="tab_{{ delivery.id }}" class="tab-pane">
+
+                                        <form name="delivery-form-{{ delivery.id }}" method="get" id="delivery-form-{{ delivery.id }}" data-id="{{ delivery.id }}" action="{{ path('deliveries_save', {'id': delivery.id}) }}">
+                                            <h4>{{ delivery.name }}</h4>
+                                            <div class="table-scrollable table-{{ delivery.id }}">
+                                                <table class="table table-striped table-bordered table-hover table-responsive">
+                                                    <tbody>
+                                                    {% for weight, price in deliveryWeightsPrices[delivery.id] %}
+                                                        <tr class="js-weight-price">
+                                                            <td>
+                                                                <input type="text" title="weight" class="max-width-100" name="weight" value="{{ weight }}">
+                                                            </td>
+                                                            <td>
+                                                                <input type="number" title="price" class="max-width-100" name="price" min="0.01" step="0.01" value="{{ price }}">
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    <tr class="js-weight-price">
+                                                        <td>
+                                                            <input type="text" title="weight" class="max-width-100" name="weight" value="">
+                                                        </td>
+                                                        <td>
+                                                            <input type="number" title="price" class="max-width-100" name="price" min="0.01" step="0.01" value="">
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            <button type="button" class="js-save-delivery btn btn-success btn-lg btn-block">Save Delivery</button>
+                                        </form>
+
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /PANEL -->
+</div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+
+    <script src="{{ asset('min/index.php?f=assets/backend-client/plugins/jquery-confirm/jquery-confirm.min.js') }}"></script>
+    <script src="{{ asset('min/index.php?f=assets/backend-client/js/custom/Delivery.js') }}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var $deliveryId = $('#delivery');
+
+            var $delivery = new Delivery($deliveryId);
+        });
+    </script>
+{% endblock %}

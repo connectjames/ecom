@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+{% block metaTitle %}Search{% endblock %}
+{% block metaKeywords %}search {{ company_keywords }}, {{ company_keywords }} search{% endblock %}
+{% block metaDescription %}Search - Search {{ company_name }} or call us on {{ company_number }} for our expert advice.{% endblock %}
+{% block canonical %}{{ absolute_url(path('contact_us')) }}{% endblock %}
+    {% block headerjavascripts %}
+        {{ parent() }}
+
+        <script>
+            (function() {
+                var cx = '014461827652742512184:k03osc4nu60';
+                var gcse = document.createElement('script');
+                gcse.type = 'text/javascript';
+                gcse.async = true;
+                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(gcse, s);
+            })();
+        </script>
+    {% endblock %}
+{% block body %}
+    <div id="contact-us">
+
+        <section class="page-header page-header-xs">
+            <div class="container">
+
+                <h1>Spill Kits Direct Search</h1>
+
+                <!-- breadcrumbs -->
+                <ol class="breadcrumb">
+                    <li><a href="{{ path('index') }}">Home</a></li>
+                    <li class="active"><a href="{{ path('search') }}">Search</a></li>
+                </ol><!-- /breadcrumbs -->
+
+            </div>
+        </section>
+        <!-- /PAGE HEADER -->
+
+        <!-- CONTACT US -->
+        <section>
+            <div class="container">
+
+                <div class="row">
+
+                    <!-- FORM -->
+                    <div class="col-md-12 col-sm-12">
+                        <div class="search"><gcse:search></gcse:search></div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        <!-- CONTACT US -->
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="application/ld+json">
+        {
+          "@context": "http://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "item": {
+              "@id": "{{ path('search') }}",
+              "name": "Contact Us",
+              "image": "{{ absolute_url(asset('assets/images/logo.png')) }}"
+            }
+          }]
+        }
+    </script>
+
+{% endblock %}

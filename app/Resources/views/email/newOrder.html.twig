@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <style type="text/css">
+        body,
+        html,
+        body {background: #fff !important;margin: 0; padding: 0; min-width: 100%!important; color: #000; font-size: 20px;font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;}
+        .content {width: 100%; max-width: 600px;}
+        @media only screen and (min-device-width: 601px) {
+            .content {width: 600px !important;}
+        }
+        h1 {color: #000; font-size: 40px;}
+        hr {}
+        th {background: #000; color: #fff; padding: 10px; border: 1px solid #fff;}
+    </style>
+</head>
+<body>
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+        <td width="300">
+            <a href="{{ absolute_url(path('index')) }}"><img src="{{ absolute_url(asset('assets/images/logo.png')) }}" alt="{{ company_name }} Logo" width="200"></a>
+        </td>
+        <td>
+            Company Address
+        </td>
+    </tr>
+</table>
+
+<h1>Invoice</h1>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+        <td>
+            <table class="content" cellpadding="0" cellspacing="0" border="0" width="300">
+                <tr>
+                    <td>
+                        <p><b>Order ID:</b></p>
+                    </td>
+                    <td>
+                        {{ order.id }}
+                    </td>
+                </tr>
+                {% if order.invoiceAddress["company"] %}
+                    <tr>
+                        <td>
+                            <p><b>Company Name:</b></p>
+                        </td>
+                        <td>
+                            {{ order.invoiceAddress["company"] }}
+                        </td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <td>
+                        <p><b>Billing Address:</b></p>
+                    </td>
+                    <td>
+                        {{ order.invoiceAddress["firstName"] }} {{ order.invoiceAddress["lastName"] }},<br>
+                        {{ order.invoiceAddress["address1"] }},<br>
+                        {% if order.invoiceAddress["address2"] %}{{ order.invoiceAddress["address2"] }},<br>{% endif %}
+                        {{ order.invoiceAddress["city"] }},<br>
+                        {{ order.invoiceAddress["postcode"] }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p><b>Phone:</b></p>
+                    </td>
+                    <td>
+                        {{ order.invoiceAddress["phone"] }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p><b>Email:</b></p>
+                    </td>
+                    <td>
+                        {{ order.email }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p><b>Shipping Method:</b></p>
+                    </td>
+                    <td>
+                        Standard Shipping
+                    </td>
+                </tr>
+                {% if order.comment %}
+                    <tr>
+                        <td>
+                            <p><b>Comment:</b></p>
+                        </td>
+                        <td>
+                            {{ order.comment }}
+                        </td>
+                    </tr>
+                {% endif %}
+            </table>
+        </td>
+    </tr>
+</table>
+<hr>
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+        <td>
+            <table class="content" cellpadding="0" cellspacing="0" border="0">
+                <tr >
+                    <th width="100" align="left">Details</th>
+                    <th width="200" align="left">Name</th>
+                    <th width="100" align="right">Unit Price</th>
+                    <th width="100" align="right">Quantity</th>
+                    <th width="100" align="right">Total</th>
+                </tr>
+                {% for item in order.orderDescription %}
+                    <tr>
+                        <td width="100" align="left"><p>{{ item["id"] }}</p></td>
+                        <td width="200" align="left">{{ item["name"] }}</td>
+                        <td width="100" align="right">&pound; {{ item["price"]|number_format(2, '.', ',') }}</td>
+                        <td width="100" align="right">{{ item["quantity"] }}</td>
+                        <td width="100" align="right">&pound; {{ item["total"]|number_format(2, '.', ',') }}</td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td width="100"></td>
+                    <td width="200"></td>
+                    <td width="100" align="right"></td>
+                    <td width="100" align="right"><b>Sub Total:</b></td>
+                    <td width="100" align="right">&pound; {{ order.orderAmount|number_format(2, '.', ',') }}</td>
+                </tr>
+                <tr>
+                    <td width="100"></td>
+                    <td width="200"></td>
+                    <td width="100" align="right"></td>
+                    <td width="100" align="right"><b>Delivery:</b></td>
+                    <td width="100" align="right">&pound; {{ order.deliveryAmount|number_format(2, '.', ',') }}</td>
+                </tr>
+                <tr>
+                    <td width="100"></td>
+                    <td width="200"></td>
+                    <td width="100" align="right"></td>
+                    <td width="100" align="right"><b>VAT:</b></td>
+                    <td width="100" align="right">&pound; {{ (order.orderAmount * 1.2 + order.deliveryAmount * 1.2 - order.orderAmount - order.deliveryAmount)|number_format(2, '.', ',') }}</td>
+                </tr>
+                <tr>
+                    <td width="100"></td>
+                    <td width="200"></td>
+                    <td width="100" align="right"></td>
+                    <td width="100" align="right"><b>Grand Total:</b></td>
+                    <td width="100" align="right">&pound; {{ (order.orderAmount * 1.2 + order.deliveryAmount * 1.2)|number_format(2, '.', ',') }}</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+<b>Thank you for purchasing from {{ company_name }}</b>
+</body>
+</html>

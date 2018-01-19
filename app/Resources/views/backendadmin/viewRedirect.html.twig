@@ -1,0 +1,45 @@
+{% extends 'baseAdmin.html.twig' %}
+{% block metaTitle %}Redirect view {% endblock %}
+{% block menu_catalogue_active %}class="active"{% endblock %}
+{% block menu_products_active %}class="active"{% endblock %}
+{% block body %}
+    <!-- page title -->
+    <header id="page-header">
+        <h1>Redirects</h1>
+        <ol class="breadcrumb">
+            <li><a href="">Redirects</a></li>
+            <li class="active">New Redirect</li>
+        </ol>
+    </header>
+    <!-- /page title -->
+    <div id="content" class="padding-20">
+        <!--
+                                PANEL CLASSES:
+                                    panel-default
+                                    panel-danger
+                                    panel-warning
+                                    panel-info
+                                    panel-success
+
+                                INFO: 	panel collapse - stored on user localStorage (handled by app.js _panels() function).
+                                        All pannels should have an unique ID or the panel collapse status will not be stored!
+                            -->
+        <div id="redirect" class="panel panel-default">
+            <div class="panel-heading">
+                <strong class="center-text">New redirect</strong>
+            </div>
+
+            <!-- panel content -->
+            <div class="panel-body">
+                <div id="top-bar-action" class="alert alert-info margin-bottom-30 action-table">
+                </div>
+            </div>
+            <!-- /panel content -->
+            {{ form_start(formRedirect)}}
+            {{ form_row(formRedirect.source, {'label': 'Source of Redirect (ei: From /index)', 'value' : redirect.source}) }}
+            {{ form_row(formRedirect.destination, {'label': 'Destination of Redirect (ei: To /about-us)', 'value' : redirect.destination}) }}
+            <button type="submit" class="btn btn-success pull-right">Save Redirect</button>
+            {{ form_end(formRedirect)}}
+        </div>
+    </div>
+{% endblock %}
