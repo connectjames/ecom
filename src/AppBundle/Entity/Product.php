@@ -158,6 +158,12 @@ class Product
      */
     private $relationChildrenProducts;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Basket", inversedBy="products")
+     * @ORM\JoinColumn(name="basket_id", referencedColumnName="id")
+     */
+    private $_basket;
+
     public function __construct()
     {
         $this->relationProductsCategories = new ArrayCollection();

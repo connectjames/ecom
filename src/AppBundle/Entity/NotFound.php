@@ -7,7 +7,7 @@ use Zenstruck\RedirectBundle\Model\NotFound as BaseNotFound;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="not_founds")
+ * @ORM\Table(name="not_found")
  */
 class NotFound extends BaseNotFound
 {

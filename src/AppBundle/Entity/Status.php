@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -46,7 +47,7 @@ class Status
      */
     public function __construct()
     {
-        $this->orders = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
     /**

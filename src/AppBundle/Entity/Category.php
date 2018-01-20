@@ -22,7 +22,7 @@ class Category
 
     /**
      * @Assert\NotBlank()
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string")
      */
     private $_name;
 
@@ -203,6 +203,10 @@ class Category
      */
     public function setDisplay($display)
     {
+        if (is_bool($display) === false) {
+            return;
+        }
+
         $this->_display = $display;
     }
 

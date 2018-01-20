@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\OrderRepository")
- * @ORM\Table(name="`order`")
+ * @ORM\Table(name="order")
  */
 class Order
 {
@@ -16,156 +16,135 @@ class Order
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    private $_id;
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="orders")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    private $user;
+    private $_user;
 
     /**
      * @ORM\Column(type="date")
      */
-    private $createdAt;
+    private $_createdAt;
 
     /**
      * @ORM\Column(type="date", nullable=true)
      */
-    private $dispatchedAt;
+    private $_dispatchedAt;
 
     /**
-     * @ORM\Column(type="text")
+     * @OneToOne(targetEntity="Basket")
+     * @JoinColumn(name="basket_id", referencedColumnName="id")
      */
-    private $orderDescription;
+    private $_basket;
 
     /**
      * @Assert\NotBlank()
      * @Assert\Email()
      * @ORM\Column(type="string")
      */
-    private $email;
+    private $_email;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Discount", inversedBy="orders")
-     * @ORM\JoinColumn(name="discount_id", referencedColumnName="id")
+     * @OneToOne(targetEntity="AddressDetail")
+     * @JoinColumn(name="addressDetail_id", referencedColumnName="id")
      */
-    private $discount;
+    private $_invoiceAddress;
 
     /**
-     * @ORM\Column(type="decimal", scale=2)
+     * @ORM\ManyToOne(targetEntity="AddressDetail", inversedBy="orders")
+     * @ORM\JoinColumn(name="addressDetail_id", referencedColumnName="id")
      */
-    private $deliveryAmount;
-
-    /**
-     * @ORM\Column(type="decimal", scale=2)
-     */
-    private $orderAmount;
-
-    /**
-     * @ORM\Column(type="string", length=100)
-     */
-    private $firstName;
-
-    /**
-     * @ORM\Column(type="string", length=100)
-     */
-    private $lastName;
-
-    /**
-     * @ORM\Column(type="text")
-     */
-    private $invoiceAddress;
-
-    /**
-     * @ORM\Column(type="text")
-     */
-    private $deliveryAddress;
+    private $_deliveryAddress;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $comment;
-
-    /**
-     * @ORM\Column(type="string", length=100, nullable=true)
-     */
-    private $purchaseOrderNumber;
-
-    /**
-     * @ORM\Column(type="string", length=200, nullable=true)
-     */
-    private $cardIdentifier;
-
-    /**
-     * @ORM\Column(type="string", length=200, nullable=true)
-     */
-    private $token;
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private $trackingNumber;
+    private $_comment;
 
     /**
      * @ORM\ManyToOne(targetEntity="Status", inversedBy="orders")
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
      */
-    private $status;
+    private $_status;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $_purchaseOrderNumber;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $_cardIdentifier;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $_token;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $_trackingNumber;
 
     public function getId()
     {
-        return $this->id;
-    }
-
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
+        return $this->_id;
     }
 
     public function setCreatedAt($createdAt)
     {
-        $this->createdAt = $createdAt;
+        $this->_createdAt = $createdAt;
     }
 
-    public function getDispatchedAt()
+    public function getCreatedAt()
     {
-        return $this->dispatchedAt;
+        return $this->_createdAt;
     }
 
     public function setDispatchedAt($dispatchedAt)
     {
-        $this->dispatchedAt = $dispatchedAt;
+        $this->_dispatchedAt = $dispatchedAt;
     }
 
-    public function getOrderDescription()
+    public function getDispatchedAt()
     {
-        return json_decode($this->orderDescription, true);
+        return $this->_dispatchedAt;
     }
 
-    public function setOrderDescription($orderDescription)
-    {
-        $this->orderDescription = $orderDescription;
-    }
-
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
+    /**
+     * @param string $email
+     */
     public function setEmail($email)
     {
-        $this->email = $email;
+        $this->_email = $email;
     }
 
-    public function getDeliveryAmount()
+    /**
+     * @return string
+     */
+    public function getEmail()
     {
-        return $this->deliveryAmount;
+        return $this->_email;
     }
 
+    /**
+     * @param Delivery $deliveryAmount
+     */
     public function setDeliveryAmount($deliveryAmount)
     {
         $this->deliveryAmount = $deliveryAmount;
+    }
+
+    /**
+     * @return Delivery
+     */
+    public function getDeliveryAmount()
+    {
+        return $this->deliveryAmount;
     }
 
     public function getOrderAmount()
@@ -276,9 +255,7 @@ class Order
     /**
      * Set user
      *
-     * @param \AppBundle\Entity\User $user
-     *
-     * @return Order
+     * @param User $user
      */
     public function setUser(\AppBundle\Entity\User $user = null)
     {
@@ -290,7 +267,7 @@ class Order
     /**
      * Get user
      *
-     * @return \AppBundle\Entity\User
+     * @return User
      */
     public function getUser()
     {
@@ -300,7 +277,7 @@ class Order
     /**
      * Set discount
      *
-     * @param \AppBundle\Entity\Discount $discount
+     * @param Discount $discount
      *
      * @return Order
      */
